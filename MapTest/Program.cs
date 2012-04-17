@@ -11,7 +11,7 @@ namespace MapTest
     {
         static void Main(string[] args)
         {
-            Room[,] rooms = MapGenerator.GenerateRooms(20);
+            Room[,] rooms = MapGenerator.GenerateRooms(15);
             //foreach (Room room in rooms)
             //{
             //    if (room != null)

@@ -58,15 +58,17 @@ namespace MapGen
                     }
                 }
             }
-
-            Room[,] roomArray = new Room[maxX + 5,maxY + 5];
+            Console.WriteLine("X: " + minX.ToString() + ", " + maxX.ToString());
+            Console.WriteLine("Y: " + minY.ToString() + ", " + maxX.ToString());
+            Room[,] roomArray = new Room[maxX + -minX + 1, maxY + -minY + 1];
 
             foreach (Room room in rooms)
             {
-                room.Location.X -= minX;
-                room.Location.Y -= minY;
-                roomArray[room.Location.X,room.Location.Y] = room;
+                room.Location.X += -minX;
+                room.Location.Y += -minY;
+                roomArray[room.Location.X, room.Location.Y] = room;
             }
+
             return roomArray;
         }
 
