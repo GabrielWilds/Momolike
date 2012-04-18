@@ -16,8 +16,8 @@ namespace MapImageRender
     {
         private int _roomInnerX = 6;
         private int _roomInnerY = 6;
-        private int _roomBorderX = 2;
-        private int _roomBorderY = 2;
+        private int _roomBorderX = 1;
+        private int _roomBorderY = 1;
         private int _doorWidth = 2;
         private int _doorDepth = 2;
         private int _roomMargin = 1;

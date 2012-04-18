@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using MapGen;
+using MapImageRender;
 
 namespace MapTest
 {
@@ -11,7 +12,7 @@ namespace MapTest
     {
         static void Main(string[] args)
         {
-            Room[,] rooms = MapGenerator.GenerateRooms(15);
+            Map map = new Map(20000);
             //foreach (Room room in rooms)
             //{
             //    if (room != null)
@@ -23,26 +24,26 @@ namespace MapTest
             //Console.WriteLine(rooms.Rank.ToString());
             //Console.WriteLine("X: " + rooms.GetLength(0) + " Y: " + rooms.GetLength(1));
 
-            string[,] mapOutput = new string[rooms.GetLength(0), rooms.GetLength(1)];
+            string[,] mapOutput = new string[map.Rooms.GetLength(0), map.Rooms.GetLength(1)];
 
-            for (int x = 0; x < rooms.GetLength(0); x++)
+            for (int y = 0; y < map.Rooms.GetLength(1); y++)
             {
-                for (int y = 0; y < rooms.GetLength(1); y++)
+                for (int x = 0; x < map.Rooms.GetLength(0); x++)
                 {
-                    if (rooms[x, y] == null)
+                    if (map.Rooms[x, y] == null)
                     {
                         mapOutput[x, y] = "  ";
                     }
                     else
                     {
                         string output = "[";
-                        if (rooms[x, y].NorthExit != null)
+                        if (map.Rooms[x, y].NorthExit != null)
                             output += "n";
-                        if (rooms[x, y].SouthExit != null)
+                        if (map.Rooms[x, y].SouthExit != null)
                             output += "s";
-                        if (rooms[x, y].EastExit != null)
+                        if (map.Rooms[x, y].EastExit != null)
                             output += "e";
-                        if (rooms[x, y].WestExit != null)
+                        if (map.Rooms[x, y].WestExit != null)
                             output += "w";
                         output += "]";
                         mapOutput[x, y] = output;
@@ -51,7 +52,7 @@ namespace MapTest
                 }
                 Console.WriteLine();
             }
-            
+            ImageMaker.GenerateImageMap("testMap.png", map, new RenderArguments());
 
             Console.ReadKey();
         }

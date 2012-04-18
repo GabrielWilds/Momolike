@@ -20,9 +20,9 @@ namespace MapGen
             private set { _internalArray = value; }
         }
 
-        public Map(int maxX, int maxY)
+        public Map(int roomCount)
         {
-            _internalArray = MapGenerator.GenerateRooms((maxX + maxY) / 2);
+            _internalArray = MapGenerator.GenerateRooms(roomCount);
         }
     }
 }

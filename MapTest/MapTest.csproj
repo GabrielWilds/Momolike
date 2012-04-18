@@ -51,6 +51,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MapImageRender\MapImageRender.csproj">
+      <Project>{40407961-C3BC-4480-9D5C-C784388064DC}</Project>
+      <Name>MapImageRender</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Momolike\MapGen.csproj">
       <Project>{5CD9939A-BD23-401C-96CC-F62860AC6A26}</Project>
       <Name>MapGen</Name>

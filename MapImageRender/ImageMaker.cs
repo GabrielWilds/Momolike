@@ -9,9 +9,9 @@ using MapGen;
 
 namespace MapImageRender
 {
-    class ImageMaker
+    public static class ImageMaker
     {
-        public void GenerateImageMap(string fileName, MapGen.Map map, RenderArguments args)
+        public static void GenerateImageMap(string fileName, MapGen.Map map, RenderArguments args)
         {
             int mapHeight = GetMapHeight(map, args);
             int mapWidth = GetMapWidth(map, args);
@@ -22,23 +22,32 @@ namespace MapImageRender
             pen.Width = args.RoomBorderHeight;
             SolidBrush background = new SolidBrush(args.BackgroundColor);
             g.FillRectangle(background, 0, 0, mapWidth, mapHeight);
+            SolidBrush inner = new SolidBrush(args.RoomColor);
+            SolidBrush border = new SolidBrush(args.BorderColor);
+
             foreach (Room room in map.Rooms)
             {
-
+                if (room != null)
+                {
+                    int X = (room.Location.X) * (args.RoomOuterWidth);
+                    int Y = (room.Location.Y) * (args.RoomOuterHeight);
+                    g.FillRectangle(border, X, Y, (args.RoomOuterWidth - args.RoomMargin), (args.RoomOuterHeight - args.RoomMargin));
+                    g.FillRectangle(inner, X + args.RoomBorderWidth, Y + args.RoomBorderHeight, args.RoomInnerWidth, args.RoomInnerHeight);
+                }
             }
-            
+            bitmap.Save(fileName, ImageFormat.Png);
         }
 
-        public int GetMapHeight(MapGen.Map map, RenderArguments args)
+        public static int GetMapHeight(MapGen.Map map, RenderArguments args)
         {
             int roomCountY = map.Rooms.GetLength(1);
-            return (args.ImageBorderHeight * 2) + (args.RoomOuterHeight * roomCountY) + (args.RoomMargin * (roomCountY - 1));
+            return (args.ImageBorderHeight * 2) + (args.RoomOuterHeight * roomCountY);
         }
 
-        public int GetMapWidth(MapGen.Map map, RenderArguments args)
+        public static int GetMapWidth(MapGen.Map map, RenderArguments args)
         {
             int roomCountX = map.Rooms.GetLength(0);
-            return (args.ImageBorderHeight * 2) + (args.RoomOuterWidth * roomCountX) + (args.RoomMargin * (roomCountX - 1));
+            return (args.ImageBorderHeight * 2) + (args.RoomOuterWidth * roomCountX);
         }
     }
 }
