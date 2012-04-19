@@ -21,7 +21,9 @@ namespace MapImageRender
             Pen pen = new Pen(Color.DimGray);
             pen.Width = args.RoomBorderHeight;
             SolidBrush background = new SolidBrush(args.BackgroundColor);
+            SolidBrush testMark = new SolidBrush(Color.Green);
             g.FillRectangle(background, 0, 0, mapWidth, mapHeight);
+            g.FillRectangle(testMark, 0, 0, 10, 20);
             SolidBrush inner = new SolidBrush(args.RoomColor);
             SolidBrush border = new SolidBrush(args.BorderColor);
 
@@ -29,10 +31,10 @@ namespace MapImageRender
             {
                 if (room != null)
                 {
-                    int X = (room.Location.X) * (args.RoomOuterWidth);
-                    int Y = (room.Location.Y) * (args.RoomOuterHeight);
-                    g.FillRectangle(border, X, Y, (args.RoomOuterWidth - args.RoomMargin), (args.RoomOuterHeight - args.RoomMargin));
-                    g.FillRectangle(inner, X + args.RoomBorderWidth, Y + args.RoomBorderHeight, args.RoomInnerWidth, args.RoomInnerHeight);
+                    int X = (room.Location.X + 1) * (args.RoomOuterWidth);
+                    int Y = (room.Location.Y + 1) * (args.RoomOuterHeight);
+                    g.FillRectangle(border, X + args.RoomMargin, Y + args.RoomMargin, (args.RoomOuterWidth - args.RoomMargin), (args.RoomOuterHeight - args.RoomMargin));
+                    g.FillRectangle(inner, X + args.RoomMargin + args.RoomBorderWidth, Y + args.RoomMargin + args.RoomBorderHeight, args.RoomInnerWidth, args.RoomInnerHeight);
                 }
             }
             bitmap.Save(fileName, ImageFormat.Png);

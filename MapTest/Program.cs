@@ -12,7 +12,7 @@ namespace MapTest
     {
         static void Main(string[] args)
         {
-            Map map = new Map(20000);
+            Map map = new Map(2000);
             //foreach (Room room in rooms)
             //{
             //    if (room != null)
@@ -54,7 +54,7 @@ namespace MapTest
             }
             ImageMaker.GenerateImageMap("testMap.png", map, new RenderArguments());
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         static int CheckForDuplicateRooms(Room[,] rooms, Point p)
