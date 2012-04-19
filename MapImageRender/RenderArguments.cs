@@ -14,15 +14,15 @@ namespace MapImageRender
     /// </summary>
     public class RenderArguments
     {
-        private int _roomInnerX = 10;
-        private int _roomInnerY = 10;
+        private int _roomInnerX = 8;
+        private int _roomInnerY = 8;
         private int _roomBorderX = 2;
         private int _roomBorderY = 2;
         private int _doorWidth = 2;
         private int _doorDepth = 2;
-        private int _roomMargin = 20;
-        private int _borderX = 50;
-        private int _borderY = 50;
+        private int _roomMargin = 0;
+        private int _borderX = 2;
+        private int _borderY = 2;
         private Color _backgroundColor = Color.Black;
         private Color _borderColor = Color.White;
         private Color _normalRoomColor = Color.Gray;

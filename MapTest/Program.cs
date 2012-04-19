@@ -12,17 +12,8 @@ namespace MapTest
     {
         static void Main(string[] args)
         {
-            Map map = new Map(2000);
-            //foreach (Room room in rooms)
-            //{
-            //    if (room != null)
-            //    {
-            //        int hits = CheckForDuplicateRooms(rooms, room.Location);
-            //        Console.WriteLine(room.Location.X.ToString() + "," + room.Location.Y.ToString() + ": " + hits.ToString() + " copies found");
-            //    }
-            //}
-            //Console.WriteLine(rooms.Rank.ToString());
-            //Console.WriteLine("X: " + rooms.GetLength(0) + " Y: " + rooms.GetLength(1));
+            Map map = new Map(20);
+            //Map map = GetStaticMap();
 
             string[,] mapOutput = new string[map.Rooms.GetLength(0), map.Rooms.GetLength(1)];
 
@@ -54,7 +45,7 @@ namespace MapTest
             }
             ImageMaker.GenerateImageMap("testMap.png", map, new RenderArguments());
 
-            //Console.ReadKey();
+            Console.ReadKey();
         }
 
         static int CheckForDuplicateRooms(Room[,] rooms, Point p)
@@ -69,6 +60,43 @@ namespace MapTest
                 }
             }
             return foundRooms;
+        }
+
+        static Map GetStaticMap()
+        {
+            Room[,] rooms = new Room[3, 3];
+            for (int x = 0; x < rooms.GetLength(0); x++)
+                for (int y = 0; y < rooms.GetLength(1); y++)
+                    rooms[x, y] = new Room(new Point(x, y));
+
+            rooms[0, 0].SouthExit = new Exit(Directions.South);
+            rooms[0, 0].EastExit = new Exit(Directions.East);
+
+            rooms[1, 0].WestExit = new Exit(Directions.West);
+            rooms[1, 0].EastExit = new Exit(Directions.East);
+
+            rooms[2, 0].WestExit = new Exit(Directions.West);
+            rooms[2, 0].SouthExit = new Exit(Directions.South);
+
+            rooms[0, 1].NorthExit = new Exit(Directions.North);
+            rooms[0, 1].EastExit = new Exit(Directions.East);
+            rooms[0, 1].SouthExit = new Exit(Directions.South);
+
+            rooms[0, 2].NorthExit = new Exit(Directions.North);
+            rooms[0, 2].EastExit = new Exit(Directions.East);
+
+            rooms[1, 1].WestExit = new Exit(Directions.West);
+
+            rooms[1, 2].WestExit = new Exit(Directions.West);
+            rooms[1, 2].EastExit = new Exit(Directions.East);
+
+            rooms[2, 1].NorthExit = new Exit(Directions.North);
+            rooms[2, 1].SouthExit = new Exit(Directions.South);
+
+            rooms[2, 2].NorthExit = new Exit(Directions.North);
+            rooms[2, 2].WestExit = new Exit(Directions.West);
+
+            return new Map(rooms);
         }
     }
 }

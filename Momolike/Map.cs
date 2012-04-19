@@ -24,5 +24,10 @@ namespace MapGen
         {
             _internalArray = MapGenerator.GenerateRooms(roomCount);
         }
+
+        public Map(Room[,] rooms)
+        {
+            _internalArray = rooms;
+        }
     }
 }

@@ -33,7 +33,8 @@ namespace MapGen
                 else
                 {
                     targetExit = new Exit(direction);
-                    Room neighbor = CheckForExistingRoom(targetRoom.GetNeighbor(direction), rooms);
+                    targetRoom.AddExit(direction);
+                    Room neighbor = CheckForExistingRoom(targetRoom.GetNeighborCoordinates(direction), rooms);
                     Directions neighborDirection = ReverseDirection(direction);
 
                     if (neighbor != null)
@@ -42,7 +43,7 @@ namespace MapGen
                     }
                     else
                     {
-                        Room newRoom = new Room(targetRoom.GetNeighbor(direction));
+                        Room newRoom = new Room(targetRoom.GetNeighborCoordinates(direction));
                         newRoom.AddExit(neighborDirection);
 
                         if (newRoom.Location.X < minX)
@@ -94,9 +95,8 @@ namespace MapGen
                     return Directions.East;
                 case Directions.East:
                     return Directions.West;
-                default:
-                    return Directions.North;
             }
+            throw new FormatException("bad enum arg");
         }
 
     }
