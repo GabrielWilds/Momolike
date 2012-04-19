@@ -46,6 +46,7 @@ namespace MapTest
             ImageMaker.GenerateImageMap("testMap.png", map, new RenderArguments());
 
             Console.ReadKey();
+            
         }
 
         static int CheckForDuplicateRooms(Room[,] rooms, Point p)

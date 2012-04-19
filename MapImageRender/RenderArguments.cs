@@ -20,9 +20,9 @@ namespace MapImageRender
         private int _roomBorderY = 2;
         private int _doorWidth = 2;
         private int _doorDepth = 2;
+        private int _imageBorderX = 10;
+        private int _imageBorderY = 10;
         private int _roomMargin = 0;
-        private int _borderX = 2;
-        private int _borderY = 2;
         private Color _backgroundColor = Color.Black;
         private Color _borderColor = Color.White;
         private Color _normalRoomColor = Color.Gray;
@@ -80,20 +80,20 @@ namespace MapImageRender
 
         public int RoomMargin
         {
-            get { return _roomMargin; }
-            set { _roomMargin = value; }
+            get { return -_roomBorderY; }
+            //set { _roomMargin = value; }
         }
 
         public int ImageBorderHeight
         {
-            get { return _borderY; }
-            set { _borderY = value; }
+            get { return _imageBorderY; }
+            set { _imageBorderY = value; }
         }
 
         public int ImageBorderWidth
         {
-            get { return _borderX; }
-            set { _borderX = value; }
+            get { return _imageBorderX; }
+            set { _imageBorderX = value; }
         }
 
         public Color BackgroundColor

@@ -34,7 +34,7 @@ namespace MapGen
                 {
                     targetExit = new Exit(direction);
                     targetRoom.AddExit(direction);
-                    Room neighbor = CheckForExistingRoom(targetRoom.GetNeighborCoordinates(direction), rooms);
+                    Room neighbor = GetRoomAtPoint(targetRoom.GetNeighborCoordinates(direction), rooms);
                     Directions neighborDirection = ReverseDirection(direction);
 
                     if (neighbor != null)
@@ -73,7 +73,7 @@ namespace MapGen
             return roomArray;
         }
 
-        public static Room CheckForExistingRoom(Point p, List<Room> rooms)
+        public static Room GetRoomAtPoint(Point p, List<Room> rooms)
         {
             foreach (Room room in rooms)
             {

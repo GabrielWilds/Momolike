@@ -55,7 +55,7 @@ namespace MapGen
                 case Directions.South:
                     return SouthExit;
             }
-            throw new FormatException("invalid enum val in argument");
+            throw new ArgumentException("invalid enum val in argument");
         }
 
         public Point GetNeighborCoordinates(Directions direction)
@@ -63,15 +63,15 @@ namespace MapGen
             switch (direction)
             {
                 case Directions.North:
-                    return new Point(Location.X, Location.Y + 1);
-                case Directions.South:
                     return new Point(Location.X, Location.Y - 1);
+                case Directions.South:
+                    return new Point(Location.X, Location.Y + 1);
                 case Directions.East:
                     return new Point(Location.X + 1, Location.Y);
                 case Directions.West:
                     return new Point(Location.X - 1, Location.Y);
             }
-            throw new FormatException("invalid enum val in argument");
+            throw new ArgumentException("invalid enum val in argument");
         }
 
         public void AddExit(Directions direction)
@@ -91,7 +91,7 @@ namespace MapGen
                     WestExit = new Exit(direction);
                     break;
                 default:
-                    break;
+                    throw new ArgumentException("invalid val in argument" + direction.ToString());
             }
         }
     }

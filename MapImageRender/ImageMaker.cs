@@ -34,8 +34,11 @@ namespace MapImageRender
                 {
                     int outerX = (room.Location.X) * (args.RoomOuterWidth) + args.ImageBorderWidth;
                     int outerY = (room.Location.Y) * (args.RoomOuterHeight) + args.ImageBorderHeight;
-                    int borderX = outerX + args.RoomMargin;
-                    int borderY = outerY + args.RoomMargin;
+                    int margin = args.RoomMargin;
+                    if (margin < 0)
+                        margin = 0;
+                    int borderX = outerX + margin;
+                    int borderY = outerY + margin;
                     int borderSizeX = args.RoomInnerWidth + (args.RoomBorderWidth * 2);
                     int borderSizeY = args.RoomInnerHeight + (args.RoomBorderHeight * 2);
                     int innerX = borderX + args.RoomBorderWidth;
