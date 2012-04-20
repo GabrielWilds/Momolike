@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 using MapGen;
 using MapImageRender;
 
@@ -45,7 +46,8 @@ namespace MapTest
             }
             ImageMaker.GenerateImageMap("testMap.png", map, new RenderArguments());
 
-            Console.ReadKey();
+            //Console.ReadKey();
+            Process.Start("testMap.png");
             
         }
 

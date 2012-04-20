@@ -30,49 +30,48 @@ namespace MapImageRender
 
             foreach (Room room in map.Rooms)
             {
-                if (room != null)
+                if (room == null)
+                    continue;
+
+                int margin = args.RoomMargin;
+                if (margin < 0)
+                    margin = 0;
+                int outerX = (room.Location.X) * (args.RoomInnerWidth + args.RoomBorderWidth + margin) + args.ImageBorderWidth;
+                int outerY = (room.Location.Y) * (args.RoomInnerHeight + args.RoomBorderHeight + margin) + args.ImageBorderHeight;
+                int borderX = outerX + args.RoomMargin;
+                int borderY = outerY + args.RoomMargin;
+                int borderSizeX = args.RoomInnerWidth + (args.RoomBorderWidth * 2);
+                int borderSizeY = args.RoomInnerHeight + (args.RoomBorderHeight * 2);
+                int innerX = borderX + args.RoomBorderWidth;
+                int innerY = borderY + args.RoomBorderHeight;
+
+
+                g.FillRectangle(border, borderX, borderY, borderSizeX, borderSizeY);
+                g.FillRectangle(inner, innerX, innerY, args.RoomInnerWidth, args.RoomInnerHeight);
+
+                if (room.NorthExit != null)
                 {
-                    int outerX = (room.Location.X) * (args.RoomOuterWidth) + args.ImageBorderWidth;
-                    int outerY = (room.Location.Y) * (args.RoomOuterHeight) + args.ImageBorderHeight;
-                    int margin = args.RoomMargin;
-                    if (margin < 0)
-                        margin = 0;
-                    int borderX = outerX + margin;
-                    int borderY = outerY + margin;
-                    int borderSizeX = args.RoomInnerWidth + (args.RoomBorderWidth * 2);
-                    int borderSizeY = args.RoomInnerHeight + (args.RoomBorderHeight * 2);
-                    int innerX = borderX + args.RoomBorderWidth;
-                    int innerY = borderY + args.RoomBorderHeight;
-
-
-                    g.FillRectangle(border, borderX, borderY, borderSizeX, borderSizeY);
-                    g.FillRectangle(inner, innerX, innerY, args.RoomInnerWidth, args.RoomInnerHeight);
-
-                    if (room.NorthExit != null)
-                    {
-                        int startX = borderX + args.RoomBorderWidth;
-                        int startY = borderY;
-                        g.FillRectangle(door, startX, startY, args.RoomInnerWidth, args.DoorDepth);
-                    }
-                    if (room.SouthExit != null)
-                    {
-                        int startX = innerX;
-                        int startY = innerY + args.RoomInnerHeight;
-                        g.FillRectangle(door, startX, startY, args.RoomInnerWidth, args.DoorDepth);
-                    }
-                    if (room.WestExit != null)
-                    {
-                        int startX = borderX;
-                        int startY = innerY;
-                        g.FillRectangle(door, startX, startY, args.DoorDepth, args.RoomInnerHeight);
-                    }
-                    if (room.EastExit != null)
-                    {
-                        int startX = borderX + borderSizeX - args.RoomBorderWidth;
-                        int startY = borderY + args.RoomBorderHeight;
-                        g.FillRectangle(door, startX, startY, args.DoorDepth, args.RoomInnerHeight);
-                    }
-
+                    int startX = borderX + args.RoomBorderWidth;
+                    int startY = borderY;
+                    g.FillRectangle(door, startX, startY, args.RoomInnerWidth, args.DoorDepth);
+                }
+                if (room.SouthExit != null)
+                {
+                    int startX = innerX;
+                    int startY = innerY + args.RoomInnerHeight;
+                    g.FillRectangle(door, startX, startY, args.RoomInnerWidth, args.DoorDepth);
+                }
+                if (room.WestExit != null)
+                {
+                    int startX = borderX;
+                    int startY = innerY;
+                    g.FillRectangle(door, startX, startY, args.DoorDepth, args.RoomInnerHeight);
+                }
+                if (room.EastExit != null)
+                {
+                    int startX = borderX + borderSizeX - args.RoomBorderWidth;
+                    int startY = borderY + args.RoomBorderHeight;
+                    g.FillRectangle(door, startX, startY, args.DoorDepth, args.RoomInnerHeight);
                 }
             }
             bitmap.Save(fileName, ImageFormat.Png);
