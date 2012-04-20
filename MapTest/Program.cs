@@ -13,7 +13,8 @@ namespace MapTest
     {
         static void Main(string[] args)
         {
-            Map map = new Map(20);
+            WeightedMapGenerator gen = new WeightedMapGenerator();
+            Map map = gen.GenerateMap(50);
             //Map map = GetStaticMap();
 
             string[,] mapOutput = new string[map.Rooms.GetLength(0), map.Rooms.GetLength(1)];
@@ -22,20 +23,20 @@ namespace MapTest
             {
                 for (int x = 0; x < map.Rooms.GetLength(0); x++)
                 {
-                    if (map.Rooms[x, y] == null)
+                    if (map[x, y] == null)
                     {
                         mapOutput[x, y] = "  ";
                     }
                     else
                     {
                         string output = "[";
-                        if (map.Rooms[x, y].NorthExit != null)
+                        if (map[x, y].NorthExit != null)
                             output += "n";
-                        if (map.Rooms[x, y].SouthExit != null)
+                        if (map[x, y].SouthExit != null)
                             output += "s";
-                        if (map.Rooms[x, y].EastExit != null)
+                        if (map[x, y].EastExit != null)
                             output += "e";
-                        if (map.Rooms[x, y].WestExit != null)
+                        if (map[x, y].WestExit != null)
                             output += "w";
                         output += "]";
                         mapOutput[x, y] = output;

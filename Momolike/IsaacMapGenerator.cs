@@ -5,9 +5,8 @@ using System.Text;
 
 namespace MapGen
 {
-    public class MapGenerator
+    class IsaacMapGenerator : MapGenerator
     {
-
         public virtual Room[,] GenerateRooms(int maxRooms)
         {
             int minX = 0;
@@ -58,50 +57,5 @@ namespace MapGen
 
             return roomArray;
         }
-
-        protected T[,] ConvertListToMap<T>(int minX, int maxX, int minY, int maxY, IEnumerable<T> rooms) where T : Room
-        {
-            T[,] roomArray = new T[maxX + -minX + 1, maxY + -minY + 1];
-
-            foreach (var room in rooms)
-            {
-                room.Location.X += -minX;
-                room.Location.Y += -minY;
-                roomArray[room.Location.X, room.Location.Y] = room;
-            }
-            return roomArray;
-        }
-
-        public T GetRoomAtPoint<T>(Point location, IEnumerable<T> rooms) where T : Room
-        {
-            foreach (var room in rooms)
-                if (room.Location.X == location.X && room.Location.Y == location.Y)
-                    return room;
-
-            return null;
-        }
-
-        public Map GenerateMap(int maxRooms)
-        {
-            Map map = new Map(GenerateRooms(maxRooms));
-            return map;
-        }
-
-        public Directions ReverseDirection(Directions direction)
-        {
-            switch (direction)
-            {
-                case Directions.North:
-                    return Directions.South;
-                case Directions.South:
-                    return Directions.North;
-                case Directions.West:
-                    return Directions.East;
-                case Directions.East:
-                    return Directions.West;
-            }
-            throw new FormatException("bad enum arg");
-        }
-
     }
 }

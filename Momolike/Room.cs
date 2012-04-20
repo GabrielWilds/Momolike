@@ -10,7 +10,7 @@ namespace MapGen
         public Point Location
         {
             get;
-            private set;
+            protected set;
         }
 
         public Exit NorthExit
@@ -74,7 +74,7 @@ namespace MapGen
             throw new ArgumentException("invalid enum val in argument");
         }
 
-        public void AddExit(Directions direction)
+        public virtual void AddExit(Directions direction)
         {
             switch (direction)
             {

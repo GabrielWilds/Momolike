@@ -9,9 +9,9 @@ namespace MapGen
     {
         Room[,] _internalArray = null;
 
-        public Room this[Point p]
+        public Room this[int X, int Y]
         {
-            get { return _internalArray[p.X, p.Y]; }
+            get { return _internalArray[X, Y]; }
         }
 
         public Room[,] Rooms
@@ -22,7 +22,8 @@ namespace MapGen
 
         public Map(int roomCount)
         {
-            _internalArray = MapGenerator.GenerateRooms(roomCount);
+            MapGenerator gen = new MapGenerator();
+            _internalArray = gen.GenerateRooms(roomCount);
         }
 
         public Map(Room[,] rooms)

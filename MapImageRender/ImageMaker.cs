@@ -20,9 +20,11 @@ namespace MapImageRender
             Graphics g = Graphics.FromImage(bitmap);
             Pen pen = new Pen(Color.DimGray);
             pen.Width = args.RoomBorderHeight;
+            SolidBrush imageBorder = new SolidBrush(Color.CornflowerBlue);
             SolidBrush background = new SolidBrush(args.BackgroundColor);
             //SolidBrush testMark = new SolidBrush(Color.Green);
-            g.FillRectangle(background, 0, 0, mapWidth, mapHeight);
+            g.FillRectangle(imageBorder, 0, 0, mapWidth, mapHeight);
+            g.FillRectangle(background, args.ImageBorderWidth, args.ImageBorderHeight, mapWidth - args.ImageBorderWidth * 2, mapHeight - args.ImageBorderHeight * 2);
             //g.FillRectangle(testMark, 0, 0, 10, 20);
             SolidBrush inner = new SolidBrush(args.RoomColor);
             SolidBrush border = new SolidBrush(args.BorderColor);
@@ -80,13 +82,19 @@ namespace MapImageRender
         public static int GetMapHeight(MapGen.Map map, RenderArguments args)
         {
             int roomCountY = map.Rooms.GetLength(1);
-            return (args.ImageBorderHeight * 2) + (args.RoomOuterHeight * roomCountY);
+            int outer = args.RoomOuterHeight;
+            if (args.RoomMargin > 0)
+                outer -= args.RoomMargin;
+            return (args.ImageBorderHeight * 2) + (outer * roomCountY);
         }
 
         public static int GetMapWidth(MapGen.Map map, RenderArguments args)
         {
             int roomCountX = map.Rooms.GetLength(0);
-            return (args.ImageBorderHeight * 2) + (args.RoomOuterWidth * roomCountX);
+            int outer = args.RoomOuterWidth;
+            if (args.RoomMargin > 0)
+                outer -= args.RoomMargin;
+            return (args.ImageBorderHeight * 2) + (outer * roomCountX);
         }
     }
 }

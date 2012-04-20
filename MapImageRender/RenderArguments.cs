@@ -80,8 +80,7 @@ namespace MapImageRender
 
         public int RoomMargin
         {
-            //get { return _roomMargin; }
-            get { return -RoomBorderHeight; }
+            get { return _roomMargin; }
             set { _roomMargin = value; }
         }
 
