@@ -25,5 +25,10 @@ namespace MapGen
             X = x;
             Y = y;
         }
+
+        public override string ToString()
+        {
+            return string.Concat("(", this.X, ",", this.Y, ")");
+        }
     }
 }

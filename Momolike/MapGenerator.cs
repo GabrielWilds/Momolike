@@ -5,71 +5,16 @@ using System.Text;
 
 namespace MapGen
 {
-    public class MapGenerator
+    public abstract class MapGenerator
     {
+        protected static Directions[] AVAILABLE_DIRECTIONS = Enum.GetValues(typeof(Directions)) as Directions[];
 
-        public virtual Room[,] GenerateRooms(int maxRooms)
+        public abstract Room[,] GenerateRooms(int maxRooms);
+
+        public virtual Map GenerateMap(int maxRooms)
         {
-            int minX = 0;
-            int maxX = 0;
-            int minY = 0;
-            int maxY = 0;
-
-            Directions[] directions = (Directions[])Enum.GetValues(typeof(Directions));
-            List<Room> rooms = new List<Room>();
-            rooms.Add(new Room(new Point(0, 0)));
-
-            while (rooms.Count < maxRooms)
-            {
-                Room targetRoom = rooms[Randomizer.GetRandomNumber(rooms.Count)];
-                Directions direction = Randomizer.GetRandomDirection();
-                Exit targetExit = targetRoom.GetExit(direction);
-
-                if (targetExit != null)
-                    continue;
-
-                targetExit = new Exit(direction);
-                targetRoom.AddExit(direction);
-                Room neighbor = GetRoomAtPoint(targetRoom.GetNeighborCoordinates(direction), rooms);
-                Directions neighborDirection = ReverseDirection(direction);
-
-                if (neighbor != null)
-                {
-                    neighbor.AddExit(neighborDirection);
-                }
-                else
-                {
-                    Room newRoom = new Room(targetRoom.GetNeighborCoordinates(direction));
-                    newRoom.AddExit(neighborDirection);
-
-                    if (newRoom.Location.X < minX)
-                        minX = newRoom.Location.X;
-                    if (newRoom.Location.X > maxX)
-                        maxX = newRoom.Location.X;
-                    if (newRoom.Location.Y < minY)
-                        minY = newRoom.Location.Y;
-                    if (newRoom.Location.Y > maxY)
-                        maxY = newRoom.Location.Y;
-
-                    rooms.Add(newRoom);
-                }
-            }
-            Room[,] roomArray = ConvertListToMap(minX, maxX, minY, maxY, rooms);
-
-            return roomArray;
-        }
-
-        protected T[,] ConvertListToMap<T>(int minX, int maxX, int minY, int maxY, IEnumerable<T> rooms) where T : Room
-        {
-            T[,] roomArray = new T[maxX + -minX + 1, maxY + -minY + 1];
-
-            foreach (var room in rooms)
-            {
-                room.Location.X += -minX;
-                room.Location.Y += -minY;
-                roomArray[room.Location.X, room.Location.Y] = room;
-            }
-            return roomArray;
+            Map map = new Map(GenerateRooms(maxRooms));
+            return map;
         }
 
         public T GetRoomAtPoint<T>(Point location, IEnumerable<T> rooms) where T : Room
@@ -79,12 +24,6 @@ namespace MapGen
                     return room;
 
             return null;
-        }
-
-        public Map GenerateMap(int maxRooms)
-        {
-            Map map = new Map(GenerateRooms(maxRooms));
-            return map;
         }
 
         public Directions ReverseDirection(Directions direction)
@@ -103,5 +42,67 @@ namespace MapGen
             throw new FormatException("bad enum arg");
         }
 
+        public Directions? GetEmptyNeighborDirection<T>(IEnumerable<T> rooms, Room room) where T : Room
+        {
+            foreach (var direction in AVAILABLE_DIRECTIONS)
+            {
+                var neighborLocation = room.GetNeighborCoordinates(direction);
+                if (!RoomExistsAtLocation<T>(neighborLocation, rooms))
+                    return direction;
+            }
+
+            return null;
+        }
+
+        protected T[,] ConvertListToMap<T>(IEnumerable<T> rooms) where T : Room
+        {
+            int minX = 0; 
+            int maxX = 0;  
+            int minY = 0;
+            int maxY = 0; 
+
+            foreach (var newRoom in rooms)
+            {
+                if (newRoom.Location.X < minX)
+                    minX = newRoom.Location.X;
+                if (newRoom.Location.X > maxX)
+                    maxX = newRoom.Location.X;
+                if (newRoom.Location.Y < minY)
+                    minY = newRoom.Location.Y;
+                if (newRoom.Location.Y > maxY)
+                    maxY = newRoom.Location.Y;
+            }
+
+            T[,] roomArray = new T[maxX + -minX + 1, maxY + -minY + 1];
+
+            foreach (var room in rooms)
+            {
+                room.Location.X += -minX;
+                room.Location.Y += -minY;
+                roomArray[room.Location.X, room.Location.Y] = room;
+            }
+            return roomArray;
+        }
+
+        protected bool RoomExistsAtLocation<T>(Point point, IEnumerable<T> rooms) where T : Room
+        {
+            return GetRoomAtPoint<T>(point, rooms) != null;
+        }
+
+        protected T[] MarkSpecialRooms<T>(IEnumerable<T> rooms) where T : Room
+        {
+
+        }
+
+        protected T[] FindLeafRooms<T>(IEnumerable<T> rooms) where T : Room
+        {
+            var items = new List<T>();
+
+            foreach (var room in rooms)
+                if (room.GetNumberOfExits() == 1)
+                    items.Add(room);
+
+            return items.ToArray();
+        }
     }
 }

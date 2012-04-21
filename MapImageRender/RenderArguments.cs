@@ -14,15 +14,15 @@ namespace MapImageRender
     /// </summary>
     public class RenderArguments
     {
-        private int _roomInnerX = 8;
-        private int _roomInnerY = 8;
-        private int _roomBorderX = 2;
-        private int _roomBorderY = 2;
-        private int _doorWidth = 2;
-        private int _doorDepth = 2;
+        private int _roomInnerX = 20;
+        private int _roomInnerY = 20;
+        private int _roomBorderX = 8;
+        private int _roomBorderY = 8;
+        private int _doorWidth = 10;
         private int _imageBorderX = 20;
         private int _imageBorderY = 20;
-        private int _roomMargin = 0;
+        private int _imageBorderMargin = 20;
+        private int _roomMargin = -8;
         private Color _backgroundColor = Color.Black;
         private Color _borderColor = Color.White;
         private Color _normalRoomColor = Color.Gray;
@@ -72,12 +72,6 @@ namespace MapImageRender
             set { _doorWidth = value; }
         }
 
-        public int DoorDepth
-        {
-            get { return _doorDepth; }
-            set { _doorDepth = value; }
-        }
-
         public int RoomMargin
         {
             get { return _roomMargin; }
@@ -96,6 +90,12 @@ namespace MapImageRender
             set { _imageBorderX = value; }
         }
 
+        public int ImageBorderMargin
+        {
+            get { return _imageBorderMargin; }
+            set { _imageBorderMargin = value; }
+        }
+
         public Color BackgroundColor
         {
             get { return _backgroundColor; }
@@ -107,7 +107,6 @@ namespace MapImageRender
             get { return _borderColor; }
             set { _borderColor = value; }
         }
-
 
         public Color RoomColor
         {

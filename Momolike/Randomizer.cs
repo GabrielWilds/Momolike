@@ -17,11 +17,6 @@ namespace MapGen
             private set { _seed = value; _random = new Random(value); }
         }
 
-        public static T PickRandomItem<T>(this T[] items)
-        {
-            return items[_random.Next(0, items.Length)];
-        }
-
         public static int GetRandomNumber()
         {
             return _random.Next();
@@ -60,5 +55,28 @@ namespace MapGen
         {
             _random = new Random();
         }
-    }
+
+        public static T PickRandomItem<T>(this T[] items)
+        {
+            return items[_random.Next(0, items.Length)];
+        }
+
+        /// <summary>
+        /// Shuffles this array in place.
+        /// </summary>
+        public static void Shuffle<T>(this T[] items)
+        {
+            int maxLength = items.Length;
+
+            for (int i = 0; i < items.Length; i++)
+                items.Swap(Randomizer.GetRandomNumber(items.Length), Randomizer.GetRandomNumber(items.Length));
+        }
+
+        private static void Swap<T>(this T[] items, int a, int b)
+        {
+            T temp = items[a];
+            items[a] = items[b];
+            items[b] = temp;
+        }
+    }    
 }

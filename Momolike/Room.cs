@@ -60,18 +60,7 @@ namespace MapGen
 
         public Point GetNeighborCoordinates(Directions direction)
         {
-            switch (direction)
-            {
-                case Directions.North:
-                    return new Point(Location.X, Location.Y - 1);
-                case Directions.South:
-                    return new Point(Location.X, Location.Y + 1);
-                case Directions.East:
-                    return new Point(Location.X + 1, Location.Y);
-                case Directions.West:
-                    return new Point(Location.X - 1, Location.Y);
-            }
-            throw new ArgumentException("invalid enum val in argument");
+            return Room.GetNeighborCoordinates(this.Location, direction);
         }
 
         public virtual void AddExit(Directions direction)
@@ -93,6 +82,42 @@ namespace MapGen
                 default:
                     throw new ArgumentException("invalid val in argument" + direction.ToString());
             }
+        }
+
+        public int GetNumberOfExits()
+        {
+            int returnValue = 0;
+
+            if (NorthExit != null)
+                returnValue++;
+
+            if (SouthExit != null)
+                returnValue++;
+
+            if (EastExit != null)
+                returnValue++;
+
+            if (WestExit != null)
+                returnValue++;
+
+            return returnValue;
+        }
+
+        public static Point GetNeighborCoordinates(Point point, Directions direction)
+        {
+            switch (direction)
+            {
+                case Directions.North:
+                    return new Point(point.X, point.Y - 1);
+                case Directions.South:
+                    return new Point(point.X, point.Y + 1);
+                case Directions.East:
+                    return new Point(point.X + 1, point.Y);
+                case Directions.West:
+                    return new Point(point.X - 1, point.Y);
+            }
+
+            throw new ArgumentException("invalid enum val in argument");
         }
     }
 }

@@ -45,20 +45,10 @@ namespace MapGen
                 {
                     WeightedRoom newRoom = new WeightedRoom(targetRoom.GetNeighborCoordinates(direction));
                     newRoom.AddExit(neighborDirection);
-
-                    if (newRoom.Location.X < minX)
-                        minX = newRoom.Location.X;
-                    if (newRoom.Location.X > maxX)
-                        maxX = newRoom.Location.X;
-                    if (newRoom.Location.Y < minY)
-                        minY = newRoom.Location.Y;
-                    if (newRoom.Location.Y > maxY)
-                        maxY = newRoom.Location.Y;
-
                     rooms.Add(newRoom);
                 }
             }
-            Room[,] roomArray = ConvertListToMap(minX, maxX, minY, maxY, rooms);
+            Room[,] roomArray = ConvertListToMap(rooms);
 
             return roomArray;
         }
@@ -66,7 +56,7 @@ namespace MapGen
         protected bool ShouldCreateNextRoom(WeightedRoom targetRoom)
         {
             float probability = 1;
-            switch (targetRoom.RoomCount)
+            switch (targetRoom.GetNumberOfExits())
             {
                 case 4:
                     return false;

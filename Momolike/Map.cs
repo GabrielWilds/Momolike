@@ -7,7 +7,7 @@ namespace MapGen
 {
     public class Map
     {
-        Room[,] _internalArray = null;
+        private Room[,] _internalArray = null;
 
         public Room this[int X, int Y]
         {
@@ -22,7 +22,7 @@ namespace MapGen
 
         public Map(int roomCount)
         {
-            MapGenerator gen = new MapGenerator();
+            MapGenerator gen = new RandomMapGenerator();
             _internalArray = gen.GenerateRooms(roomCount);
         }
 

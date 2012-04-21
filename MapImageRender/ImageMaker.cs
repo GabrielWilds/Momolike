@@ -18,14 +18,15 @@ namespace MapImageRender
 
             Bitmap bitmap = new Bitmap(mapWidth, mapHeight);
             Graphics g = Graphics.FromImage(bitmap);
+
             Pen pen = new Pen(Color.DimGray);
             pen.Width = args.RoomBorderHeight;
+
             SolidBrush imageBorder = new SolidBrush(Color.CornflowerBlue);
             SolidBrush background = new SolidBrush(args.BackgroundColor);
-            //SolidBrush testMark = new SolidBrush(Color.Green);
             g.FillRectangle(imageBorder, 0, 0, mapWidth, mapHeight);
             g.FillRectangle(background, args.ImageBorderWidth, args.ImageBorderHeight, mapWidth - args.ImageBorderWidth * 2, mapHeight - args.ImageBorderHeight * 2);
-            //g.FillRectangle(testMark, 0, 0, 10, 20);
+
             SolidBrush inner = new SolidBrush(args.RoomColor);
             SolidBrush border = new SolidBrush(args.BorderColor);
             SolidBrush door = new SolidBrush(Color.RosyBrown);
@@ -36,12 +37,19 @@ namespace MapImageRender
                     continue;
 
                 int margin = args.RoomMargin;
-                if (margin < 0)
-                    margin = 0;
-                int outerX = (room.Location.X) * (args.RoomInnerWidth + args.RoomBorderWidth + margin) + args.ImageBorderWidth;
-                int outerY = (room.Location.Y) * (args.RoomInnerHeight + args.RoomBorderHeight + margin) + args.ImageBorderHeight;
-                int borderX = outerX + args.RoomMargin;
-                int borderY = outerY + args.RoomMargin;
+                int outerX = (room.Location.X * (args.RoomInnerWidth + (args.RoomBorderWidth * 2) + margin)) + args.ImageBorderWidth + args.ImageBorderMargin;
+                int outerY = (room.Location.Y * (args.RoomInnerHeight + (args.RoomBorderHeight * 2) + margin)) + args.ImageBorderHeight + args.ImageBorderMargin;
+                int borderX = outerX;
+                int borderY = outerY;
+
+                if (margin > 0)
+                {
+                    borderX += margin;
+                    borderY += margin;
+                }
+
+
+
                 int borderSizeX = args.RoomInnerWidth + (args.RoomBorderWidth * 2);
                 int borderSizeY = args.RoomInnerHeight + (args.RoomBorderHeight * 2);
                 int innerX = borderX + args.RoomBorderWidth;
@@ -53,27 +61,27 @@ namespace MapImageRender
 
                 if (room.NorthExit != null)
                 {
-                    int startX = borderX + args.RoomBorderWidth;
+                    int startX = innerX + ((args.RoomInnerWidth - args.DoorWidth) / 2);
                     int startY = borderY;
-                    g.FillRectangle(door, startX, startY, args.RoomInnerWidth, args.DoorDepth);
+                    g.FillRectangle(door, startX, startY, args.DoorWidth, args.RoomBorderHeight);
                 }
                 if (room.SouthExit != null)
                 {
-                    int startX = innerX;
+                    int startX = innerX + ((args.RoomInnerWidth - args.DoorWidth) / 2);
                     int startY = innerY + args.RoomInnerHeight;
-                    g.FillRectangle(door, startX, startY, args.RoomInnerWidth, args.DoorDepth);
+                    g.FillRectangle(door, startX, startY, args.DoorWidth, args.RoomBorderHeight);
                 }
                 if (room.WestExit != null)
                 {
                     int startX = borderX;
-                    int startY = innerY;
-                    g.FillRectangle(door, startX, startY, args.DoorDepth, args.RoomInnerHeight);
+                    int startY = innerY + ((args.RoomInnerHeight - args.DoorWidth) / 2);
+                    g.FillRectangle(door, startX, startY, args.RoomBorderWidth, args.DoorWidth);
                 }
                 if (room.EastExit != null)
                 {
                     int startX = borderX + borderSizeX - args.RoomBorderWidth;
-                    int startY = borderY + args.RoomBorderHeight;
-                    g.FillRectangle(door, startX, startY, args.DoorDepth, args.RoomInnerHeight);
+                    int startY = borderY + args.RoomBorderHeight + ((args.RoomInnerHeight - args.DoorWidth) / 2);
+                    g.FillRectangle(door, startX, startY, args.RoomBorderWidth, args.DoorWidth);
                 }
             }
             bitmap.Save(fileName, ImageFormat.Png);
@@ -83,18 +91,20 @@ namespace MapImageRender
         {
             int roomCountY = map.Rooms.GetLength(1);
             int outer = args.RoomOuterHeight;
-            if (args.RoomMargin > 0)
-                outer -= args.RoomMargin;
-            return (args.ImageBorderHeight * 2) + (outer * roomCountY);
+
+            outer += -args.RoomMargin;
+
+            return (args.ImageBorderHeight * 2) + (args.ImageBorderMargin * 2) + (outer * roomCountY) + Math.Abs(args.RoomMargin);
         }
 
         public static int GetMapWidth(MapGen.Map map, RenderArguments args)
         {
             int roomCountX = map.Rooms.GetLength(0);
             int outer = args.RoomOuterWidth;
-            if (args.RoomMargin > 0)
-                outer -= args.RoomMargin;
-            return (args.ImageBorderHeight * 2) + (outer * roomCountX);
+
+            outer += -args.RoomMargin;
+
+            return (args.ImageBorderHeight * 2) + (args.ImageBorderMargin * 2) + (outer * roomCountX) + Math.Abs(args.RoomMargin);
         }
     }
 }
