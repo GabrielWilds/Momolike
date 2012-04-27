@@ -22,7 +22,7 @@ namespace MapGen
 
         public Map(int roomCount)
         {
-            MapGenerator gen = new RandomMapGenerator();
+            MapGenerator gen = new SpreadRandomMapGenerator();
             _internalArray = gen.GenerateRooms(roomCount);
         }
 

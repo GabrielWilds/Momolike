@@ -20,7 +20,6 @@ namespace MapGen
         public static int GetRandomNumber()
         {
             return _random.Next();
-            
         }
         public static int GetRandomNumber(int max)
         {
@@ -29,6 +28,23 @@ namespace MapGen
         public static int GetRandomNumber(int min, int max)
         {
             return _random.Next(min, max);
+        }
+        public static int GetHighRandomNumber(int max)
+        {
+            return GetHighRandomNumber(0, max);
+        }
+        public static int GetHighRandomNumber(int min, int max)
+        {
+            int num = _random.Next(min, max);
+            num = (int)(num * 2);
+            while(num >= max)
+            {
+                int sub = (max / 10);
+                if (sub == 0)
+                    sub = 2;
+                num -= (sub);
+            }
+            return num;
         }
 
         public static double GetRandomDouble()

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpreadRandomMapGenerator.cs" />
     <Compile Include="Exit.cs" />
     <Compile Include="IsaacMapGenerator.cs" />
     <Compile Include="Map.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="RandomMapGenerator.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="TreasureExit.cs" />
+    <Compile Include="TreasureRoom.cs" />
     <Compile Include="WeightedMapGenerator.cs" />
     <Compile Include="WeightedRoom.cs" />
   </ItemGroup>

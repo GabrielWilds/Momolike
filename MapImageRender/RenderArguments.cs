@@ -14,18 +14,20 @@ namespace MapImageRender
     /// </summary>
     public class RenderArguments
     {
-        private int _roomInnerX = 20;
-        private int _roomInnerY = 20;
-        private int _roomBorderX = 8;
-        private int _roomBorderY = 8;
-        private int _doorWidth = 10;
+        private int _roomInnerX = 12;
+        private int _roomInnerY = 12;
+        private int _roomBorderX = 6;
+        private int _roomBorderY = 6;
+        private int _doorWidth = 4;
         private int _imageBorderX = 20;
         private int _imageBorderY = 20;
         private int _imageBorderMargin = 20;
-        private int _roomMargin = -8;
-        private Color _backgroundColor = Color.Black;
-        private Color _borderColor = Color.White;
-        private Color _normalRoomColor = Color.Gray;
+        private int _roomMargin = -4;
+        private Color _imageBackgroundColor = Color.DarkSlateBlue;
+        private Color _imageBorderColor = Color.CornflowerBlue;
+        private Color _borderColor = Color.Black;
+        private Color _normalRoomColor = Color.White;
+        private Color _normalDoorColor = Color.White;
         private Color _treasureRoomColor = Color.Gold;
         private Color _bossRoomColor = Color.DarkRed;
         private Color _shopRoomColor = Color.ForestGreen;
@@ -96,10 +98,16 @@ namespace MapImageRender
             set { _imageBorderMargin = value; }
         }
 
-        public Color BackgroundColor
+        public Color ImageBackgroundColor
         {
-            get { return _backgroundColor; }
-            set { _backgroundColor = value; }
+            get { return _imageBackgroundColor; }
+            set { _imageBackgroundColor = value; }
+        }
+
+        public Color ImageBorderColor
+        {
+            get { return _imageBorderColor; }
+            set { _imageBorderColor = value; }
         }
 
         public Color BorderColor
@@ -112,6 +120,12 @@ namespace MapImageRender
         {
             get { return _normalRoomColor; }
             set { _normalRoomColor = value; }
+        }
+
+        public Color DoorColor
+        {
+            get { return _normalDoorColor; }
+            set { _normalDoorColor = value; }
         }
 
         public Color TreasureRoomColor

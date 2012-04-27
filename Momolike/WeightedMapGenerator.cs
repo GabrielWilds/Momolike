@@ -48,7 +48,7 @@ namespace MapGen
                     rooms.Add(newRoom);
                 }
             }
-            Room[,] roomArray = ConvertListToMap(rooms);
+            Room[,] roomArray = ConvertListToMap(MarkSpecialRooms<Room>(rooms));
 
             return roomArray;
         }

@@ -7,7 +7,7 @@ namespace MapGen
 {
     public abstract class MapGenerator
     {
-        protected static Directions[] AVAILABLE_DIRECTIONS = Enum.GetValues(typeof(Directions)) as Directions[];
+        protected static readonly Directions[] AVAILABLE_DIRECTIONS = Enum.GetValues(typeof(Directions)) as Directions[];
 
         public abstract Room[,] GenerateRooms(int maxRooms);
 
@@ -89,9 +89,25 @@ namespace MapGen
             return GetRoomAtPoint<T>(point, rooms) != null;
         }
 
-        protected T[] MarkSpecialRooms<T>(IEnumerable<T> rooms) where T : Room
+        protected IEnumerable<T> MarkSpecialRooms<T>(IEnumerable<T> rooms) where T : Room
         {
+            return MarkBranchEndRooms<T>(rooms);
+        }
 
+        protected IEnumerable<T> MarkBranchEndRooms<T>(IEnumerable<T> rooms) where T : Room
+        {
+            List<Room> markedRooms = new List<Room>();
+            for (int i = 0; i < rooms.Count<Room>(); i++)
+            {
+                var room = rooms.ElementAt(i);
+                if (room.GetNumberOfExits() == 1)
+                {
+                    markedRooms.Add(new TreasureRoom(room));
+                }
+                else
+                    markedRooms.Add(room);
+            }
+            return markedRooms as IEnumerable<T>;
         }
 
         protected T[] FindLeafRooms<T>(IEnumerable<T> rooms) where T : Room

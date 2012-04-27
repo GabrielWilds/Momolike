@@ -19,22 +19,26 @@ namespace MapImageRender
             Bitmap bitmap = new Bitmap(mapWidth, mapHeight);
             Graphics g = Graphics.FromImage(bitmap);
 
-            Pen pen = new Pen(Color.DimGray);
-            pen.Width = args.RoomBorderHeight;
+            //Pen pen = new Pen(Color.DimGray);
+            //pen.Width = args.RoomBorderHeight;
 
-            SolidBrush imageBorder = new SolidBrush(Color.CornflowerBlue);
-            SolidBrush background = new SolidBrush(args.BackgroundColor);
+            SolidBrush imageBorder = new SolidBrush(args.ImageBorderColor);
+            SolidBrush background = new SolidBrush(args.ImageBackgroundColor);
             g.FillRectangle(imageBorder, 0, 0, mapWidth, mapHeight);
             g.FillRectangle(background, args.ImageBorderWidth, args.ImageBorderHeight, mapWidth - args.ImageBorderWidth * 2, mapHeight - args.ImageBorderHeight * 2);
 
-            SolidBrush inner = new SolidBrush(args.RoomColor);
+            SolidBrush normalRoomInner = new SolidBrush(args.RoomColor);
+            SolidBrush treasureRoomInner = new SolidBrush(args.TreasureRoomColor);
             SolidBrush border = new SolidBrush(args.BorderColor);
-            SolidBrush door = new SolidBrush(Color.RosyBrown);
+            SolidBrush door = new SolidBrush(args.DoorColor);
 
             foreach (Room room in map.Rooms)
             {
+                SolidBrush brush = normalRoomInner;
                 if (room == null)
                     continue;
+                if (room is TreasureRoom)
+                    brush = treasureRoomInner;
 
                 int margin = args.RoomMargin;
                 int outerX = (room.Location.X * (args.RoomInnerWidth + (args.RoomBorderWidth * 2) + margin)) + args.ImageBorderWidth + args.ImageBorderMargin;
@@ -57,7 +61,7 @@ namespace MapImageRender
 
 
                 g.FillRectangle(border, borderX, borderY, borderSizeX, borderSizeY);
-                g.FillRectangle(inner, innerX, innerY, args.RoomInnerWidth, args.RoomInnerHeight);
+                g.FillRectangle(brush, innerX, innerY, args.RoomInnerWidth, args.RoomInnerHeight);
 
                 if (room.NorthExit != null)
                 {

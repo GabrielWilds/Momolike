@@ -37,6 +37,8 @@ namespace MapTest
 
                 DetectDuplicates(directoryName, directoryName + ".txt");
             }
+            Console.WriteLine("Done! Press a key to exit.");
+            Console.ReadKey();
         }
 
         private static void DetectDuplicates(string folder, string reportName)
@@ -86,6 +88,7 @@ namespace MapTest
         {
             return new MapGenerator[] { 
                 new RandomMapGenerator(),
+                new SpreadRandomMapGenerator(),
                 new WeightedMapGenerator(),
                 new IsaacMapGenerator()
             };
