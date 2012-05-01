@@ -17,12 +17,24 @@ namespace GameTest
     public class Game : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
+        //InputHandler input;
         SpriteBatch spriteBatch;
+        Rectangle screenRectangle;
+        Player player;
+
+        const int ScreenWidth = 640;
+        const int ScreenHeight = 480;
 
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = ScreenWidth;
+            graphics.PreferredBackBufferHeight = ScreenHeight;
+            screenRectangle = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
+
             Content.RootDirectory = "Content";
+
+            Components.Add(new InputHandler(this));
         }
 
         /// <summary>
@@ -33,8 +45,7 @@ namespace GameTest
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            //input = new InputHandler(this);
             base.Initialize();
         }
 
@@ -46,8 +57,7 @@ namespace GameTest
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            player = new Player(Content.Load<Texture2D>("bunnySprite"), screenRectangle);
         }
 
         /// <summary>
@@ -66,11 +76,11 @@ namespace GameTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            // TODO: Add your update logic here
+            //input.Update(gameTime);
+            player.Update();
 
             base.Update(gameTime);
         }
@@ -83,7 +93,9 @@ namespace GameTest
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            player.Draw(spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
