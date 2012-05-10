@@ -14,27 +14,47 @@ namespace GameTest
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game : Microsoft.Xna.Framework.Game
+    public class MomolikeGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        //InputHandler input;
-        SpriteBatch spriteBatch;
-        Rectangle screenRectangle;
-        Player player;
+        public static readonly Rectangle SCREEN_BOUNDS = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        public const int SCREEN_WIDTH = 640;
+        public const int SCREEN_HEIGHT = 480;
+        public const float UPDATES_PER_SECOND = 60;
 
-        const int ScreenWidth = 640;
-        const int ScreenHeight = 480;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private Rectangle _screenRectangle;
+        private Player _player;
+        private int frameSkip = 0;
 
-        public Game()
+        private List<ObjectBase> _activeObjects = new List<ObjectBase>();
+
+        public MomolikeGame()
         {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = ScreenWidth;
-            graphics.PreferredBackBufferHeight = ScreenHeight;
-            screenRectangle = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
+            _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+            _graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            _screenRectangle = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
             Content.RootDirectory = "Content";
 
             Components.Add(new InputHandler(this));
+        }
+
+        public Texture2D LoadSprite(string path)
+        {
+            return this.Content.Load<Texture2D>(path);
+        }
+
+        public void ClearActiveObjects()
+        {
+            _activeObjects.Clear();
+            _activeObjects.Add(_player);
+        }
+
+        public void AddActiveObject(ObjectBase obj)
+        {
+            _activeObjects.Add(obj);
         }
 
         /// <summary>
@@ -45,8 +65,15 @@ namespace GameTest
         /// </summary>
         protected override void Initialize()
         {
-            //input = new InputHandler(this);
             base.Initialize();
+
+            this._player = new Player();
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / UPDATES_PER_SECOND);
+
+
+            ClearActiveObjects();
+            AddActiveObject(_player);
+            AddActiveObject(new Rock());
         }
 
         /// <summary>
@@ -55,9 +82,10 @@ namespace GameTest
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = new Player(Content.Load<Texture2D>("bunnySprite"), screenRectangle);
+            // Load content into pipeline.  Shouldn't be doing this in the middle of gameplay.
+            Content.Load<Texture2D>("bunnySprite");
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         /// <summary>
@@ -79,8 +107,8 @@ namespace GameTest
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            //input.Update(gameTime);
-            player.Update();
+            foreach (var item in _activeObjects)
+                item.Update();
 
             base.Update(gameTime);
         }
@@ -91,11 +119,26 @@ namespace GameTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            frameSkip++;
+            switch (frameSkip % 60)
+            {
+                case 0:
+                    break;
+                case 1:
+                    GraphicsDevice.Clear(Color.Green);
+                    break;
+                case 2:
+                    GraphicsDevice.Clear(Color.Yellow);
+                    break;
+                default:
+                    GraphicsDevice.Clear(Color.CornflowerBlue);
+                    break;
+            }
 
-            spriteBatch.Begin();
-            player.Draw(spriteBatch);
-            spriteBatch.End();
+            _spriteBatch.Begin();
+            foreach (var item in _activeObjects)
+                item.Draw(_spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

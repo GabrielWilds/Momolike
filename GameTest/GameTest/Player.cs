@@ -10,64 +10,54 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameTest
 {
-    public class Player
+    public class Player : ObjectBase
     {
-        Texture2D _sprite;
-        Vector2 _position;
-        Vector2 _motion;
-        float _accel = 0f;
-        float _playerSpeed = 6f;
-        Rectangle _screenBounds;
+        private float _acceleration = 0f;
+        private float _maxAcceleration = 3.0f;
+        private float _baseSpeed = 3.0f;
+        private float _currentSpeed = 0.0f;
+        private float _maxTotalSpeed = 6.0f;
 
-        public Player(Texture2D sprite, Rectangle screenBounds)
+        public Player() : base(Program.Game.LoadSprite("bunnySprite"))
         {
-            _sprite = sprite;
-            _screenBounds = screenBounds;
-            _position = new Vector2(screenBounds.X / 2, screenBounds.Y / 2);
+
         }
 
-        public void Update()
+        public override void Update()
         {
-            _motion = Vector2.Zero;
-            if (InputHandler.KeyDown(Keys.Left))
-                _motion.X = -1;
-            if (InputHandler.KeyDown(Keys.Right))
-                _motion.X = 1;
-            if (InputHandler.KeyDown(Keys.Down))
-                _motion.Y = 1;
-            if (InputHandler.KeyDown(Keys.Up))
-                _motion.Y = -1;
+            this.Motion = Vector2.Zero;
+            if (InputHandler.KeyDown(Keys.A))
+                this.Motion.X = -1;
+            else if (InputHandler.KeyDown(Keys.D))
+                this.Motion.X = 1;
 
-            if (_motion != Vector2.Zero && _accel < 6)
+            if (InputHandler.KeyDown(Keys.S))
+                this.Motion.Y = 1;
+            else if (InputHandler.KeyDown(Keys.W))
+                this.Motion.Y = -1;
+
+
+
+            if (this.Motion != Vector2.Zero)
             {
-                _accel += 0.5f;
-            }
-            else
-            {
-                _accel = 0;
+                _acceleration += 0.05f;
+
+                if (_acceleration > _maxAcceleration)
+                    _acceleration = _maxAcceleration;
             }
 
-            _motion.X *= _playerSpeed + _accel;
-            _motion.Y *= _playerSpeed + _accel;
-            _position += _motion;
+
+
+            this.Motion.X *= _baseSpeed + _acceleration;
+            this.Motion.Y *= _baseSpeed + _acceleration;
+            this.Position += this.Motion;
+
             EnforceBounds();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_sprite, _position, Color.White);
-        }
-
-        public void EnforceBounds()
-        {
-            if (_position.X < 0)
-                _position.X = 0;
-            if (_position.X + _sprite.Width > _screenBounds.Width)
-                _position.X = _screenBounds.Width - _sprite.Width;
-            if (_position.Y < 0)
-                _position.Y = 0;
-            if (_position.Y + _sprite.Height > _screenBounds.Height)
-                _position.Y = _screenBounds.Height - _sprite.Width;
+            spriteBatch.Draw(this.Sprite, this.Position, Color.White);
         }
     }
 }

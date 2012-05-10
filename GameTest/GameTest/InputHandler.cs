@@ -65,7 +65,7 @@ namespace GameTest
 
         #region Constructor Region
 
-        public InputHandler(Game game)
+        public InputHandler(MomolikeGame game)
             : base(game)
         {
             _keyboardState = Keyboard.GetState();

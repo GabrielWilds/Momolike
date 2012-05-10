@@ -56,10 +56,10 @@ namespace MapGen
 
         protected T[,] ConvertListToMap<T>(IEnumerable<T> rooms) where T : Room
         {
-            int minX = 0; 
-            int maxX = 0;  
+            int minX = 0;
+            int maxX = 0;
             int minY = 0;
-            int maxY = 0; 
+            int maxY = 0;
 
             foreach (var newRoom in rooms)
             {
@@ -120,5 +120,7 @@ namespace MapGen
 
             return items.ToArray();
         }
+
+
     }
 }
