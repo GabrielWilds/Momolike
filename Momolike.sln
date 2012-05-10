@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapImageRender", "MapImageRender\MapImageRender.csproj", "{40407961-C3BC-4480-9D5C-C784388064DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTest", "GameTest\GameTest\GameTest.csproj", "{12213370-89A2-498F-BC7E-562B7A0B79A5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CD9939A-BD23-401C-96CC-F62860AC6A26} = {5CD9939A-BD23-401C-96CC-F62860AC6A26}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTestContent", "GameTest\GameTestContent\GameTestContent.contentproj", "{CA1BF42C-2EEB-4F3A-B18F-1AF99D6B2D8C}"
 EndProject

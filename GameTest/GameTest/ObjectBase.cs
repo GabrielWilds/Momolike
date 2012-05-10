@@ -43,7 +43,7 @@ namespace GameTest
             spriteBatch.Draw(this.Sprite, this.Position, Color.White);
         }
 
-        protected void EnforceBounds()
+        public void EnforceBounds()
         {
             if (this.Position.Y < 0)
                 this.Position.Y = 0;
@@ -54,6 +54,10 @@ namespace GameTest
                 this.Position.X = 0;
             else if (this.Position.X + this.Sprite.Width > MomolikeGame.SCREEN_BOUNDS.Width)
                 this.Position.X = MomolikeGame.SCREEN_BOUNDS.Width - this.Sprite.Width;
+        }
+
+        public virtual void Collide(ObjectBase obj)
+        {
         }
     }
 }

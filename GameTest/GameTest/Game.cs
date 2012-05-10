@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using MapGen;
 
 namespace GameTest
 {
@@ -17,8 +18,8 @@ namespace GameTest
     public class MomolikeGame : Microsoft.Xna.Framework.Game
     {
         public static readonly Rectangle SCREEN_BOUNDS = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        public const int SCREEN_WIDTH = 640;
-        public const int SCREEN_HEIGHT = 480;
+        public const int SCREEN_WIDTH = 1280;
+        public const int SCREEN_HEIGHT = 720;
         public const float UPDATES_PER_SECOND = 60;
 
         private GraphicsDeviceManager _graphics;
@@ -67,13 +68,19 @@ namespace GameTest
         {
             base.Initialize();
 
+            CollisionHashMap.Initialize();
+
             this._player = new Player();
             this.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / UPDATES_PER_SECOND);
 
 
             ClearActiveObjects();
-            AddActiveObject(_player);
-            AddActiveObject(new Rock());
+            for (int i = 0; i < 50; i++)
+            {
+                Rock rock = new Rock(new Vector2(MapGen.Randomizer.GetRandomNumber(SCREEN_WIDTH), MapGen.Randomizer.GetRandomNumber(SCREEN_HEIGHT)));
+                rock.EnforceBounds();
+                AddActiveObject(rock);
+            }
         }
 
         /// <summary>
@@ -110,6 +117,8 @@ namespace GameTest
             foreach (var item in _activeObjects)
                 item.Update();
 
+            CollisionHashMap.CheckCollisions(_activeObjects);
+
             base.Update(gameTime);
         }
 
@@ -119,21 +128,7 @@ namespace GameTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            frameSkip++;
-            switch (frameSkip % 60)
-            {
-                case 0:
-                    break;
-                case 1:
-                    GraphicsDevice.Clear(Color.Green);
-                    break;
-                case 2:
-                    GraphicsDevice.Clear(Color.Yellow);
-                    break;
-                default:
-                    GraphicsDevice.Clear(Color.CornflowerBlue);
-                    break;
-            }
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
             foreach (var item in _activeObjects)

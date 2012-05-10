@@ -17,6 +17,7 @@ namespace GameTest
         private float _baseSpeed = 3.0f;
         private float _currentSpeed = 0.0f;
         private float _maxTotalSpeed = 6.0f;
+        private Color color = Color.White;
 
         public Player() : base(Program.Game.LoadSprite("bunnySprite"))
         {
@@ -25,6 +26,8 @@ namespace GameTest
 
         public override void Update()
         {
+            color = Color.White;
+
             this.Motion = Vector2.Zero;
             if (InputHandler.KeyDown(Keys.A))
                 this.Motion.X = -1;
@@ -57,7 +60,13 @@ namespace GameTest
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.Sprite, this.Position, Color.White);
+            spriteBatch.Draw(this.Sprite, this.Position, color);
+        }
+
+        public override void Collide(ObjectBase obj)
+        {
+            color = Color.Red;
+            this.Position -= obj.Position - this.Position;
         }
     }
 }

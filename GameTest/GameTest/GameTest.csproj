@@ -123,6 +123,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Momolike\MapGen.csproj">
+      <Project>{5CD9939A-BD23-401C-96CC-F62860AC6A26}</Project>
+      <Name>MapGen</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameTestContent\GameTestContent.contentproj">
       <Name>GameTestContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
