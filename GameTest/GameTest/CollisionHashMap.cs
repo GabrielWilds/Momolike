@@ -95,19 +95,19 @@ namespace GameTest
 
             public void CheckCollisions()
             {
-                    for (int a = 0; a < moving.Count; a++)
-                    {
-                        ObjectBase objectA = moving[a];
+                for (int a = 0; a < moving.Count; a++)
+                {
+                    ObjectBase objectA = moving[a];
 
-                        for (int b = a + 1; b < moving.Count; b++)
-                        {
-                            CheckForCollision(objectA, moving[b]);
-                        }
-                        for (int b = 0; b < still.Count; b++)
-                        {
-                            CheckForCollision(objectA, still[b]);
-                        }
+                    for (int b = a + 1; b < moving.Count; b++)
+                    {
+                        CheckForCollision(objectA, moving[b]);
                     }
+                    for (int b = 0; b < still.Count; b++)
+                    {
+                        CheckForCollision(objectA, still[b]);
+                    }
+                }
             }
 
             public void CheckForCollision(ObjectBase objectA, ObjectBase objectB)
@@ -115,13 +115,65 @@ namespace GameTest
                 Rectangle a = new Rectangle((int)objectA.Position.X, (int)objectA.Position.Y, objectA.Sprite.Width, objectA.Sprite.Height);
                 Rectangle b = new Rectangle((int)objectB.Position.X, (int)objectB.Position.Y, objectB.Sprite.Width, objectB.Sprite.Height);
 
-                bool intersects;
-                a.Intersects(ref b, out intersects);
+                int collisionWidth = 0;
+                int collisionHeight = 0;
+                int collisionLeft = 0;
+                int collisionTop = 0;
 
-                if (intersects)
-                    objectA.Collide(objectB);
+
+                // Determine Left / Top most object
+                if (a.Left < b.Left)
+                {
+                    collisionWidth = GetCollisionWidth(a, b);
+                    collisionLeft = b.Left;
+                }
+                else
+                {
+                    collisionWidth = GetCollisionWidth(b, a);
+                    collisionLeft = a.Left;
+                }
+
+                if (a.Top < b.Top)
+                {
+                    collisionHeight = GetCollisionHeight(a, b);
+                    collisionTop = b.Top;
+                }
+                else
+                {
+                    collisionHeight = GetCollisionHeight(b, a);
+                    collisionTop = a.Top;
+                }
+
+                if (collisionHeight < 0 || collisionWidth < 0)
+                    return;
+
+                Rectangle collision = new Rectangle(collisionHeight, collisionWidth, collisionLeft, collisionTop);
+                // do crap with it
 
             }
+
+            private int GetCollisionWidth(Rectangle left, Rectangle right)
+            {
+                int value = left.Width + (left.Left - right.Left);
+                int rightTrim = (left.Right - right.Right);
+
+                if (rightTrim > 0)
+                    value -= rightTrim;
+
+                return value;
+            }
+
+            private int GetCollisionHeight(Rectangle top, Rectangle bottom)
+            {
+                int value = top.Height + (top.Top - bottom.Top);
+                int bottomTrim = (top.Bottom - bottom.Bottom);
+
+                if (bottomTrim > 0)
+                    value -= bottomTrim;
+
+                return value;
+            }
+
         }
     }
 

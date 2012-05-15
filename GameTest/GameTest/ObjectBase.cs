@@ -11,7 +11,23 @@ namespace GameTest
     {
         public Vector2 Position;
         public Vector2 Motion = Vector2.Zero;
-        public Texture2D Sprite;
+        private Texture2D _sprite;
+        private Vector2 objectCenter;
+
+        public Texture2D Sprite
+        {
+            get { return _sprite; }
+            set
+            {
+                _sprite = value;
+                objectCenter = new Vector2(_sprite.Width / 2, _sprite.Height / 2);
+            }
+        }
+
+        public Vector2 Center
+        {
+            get { return Position + objectCenter; }
+        }
 
         protected ObjectBase()
         {

@@ -75,12 +75,13 @@ namespace GameTest
 
 
             ClearActiveObjects();
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 0; i++)
             {
                 Rock rock = new Rock(new Vector2(MapGen.Randomizer.GetRandomNumber(SCREEN_WIDTH), MapGen.Randomizer.GetRandomNumber(SCREEN_HEIGHT)));
                 rock.EnforceBounds();
                 AddActiveObject(rock);
             }
+            AddActiveObject(new Rock(new Vector2(500f, 300f)));
         }
 
         /// <summary>

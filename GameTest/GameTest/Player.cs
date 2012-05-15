@@ -66,7 +66,9 @@ namespace GameTest
         public override void Collide(ObjectBase obj)
         {
             color = Color.Red;
-            this.Position -= obj.Position - this.Position;
+            Vector2 distance = obj.Center - this.Center;
+            this.Position -= distance;
+
         }
     }
 }
