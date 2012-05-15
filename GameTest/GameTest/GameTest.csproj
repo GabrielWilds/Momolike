@@ -119,6 +119,7 @@
     <Compile Include="Rock.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bullet.png" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>

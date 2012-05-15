@@ -56,8 +56,9 @@ namespace GameTest
                 this.Position.X = MomolikeGame.SCREEN_BOUNDS.Width - this.Sprite.Width;
         }
 
-        public virtual void Collide(ObjectBase obj)
+        public virtual void Collide(ObjectBase obj, Rectangle collision)
         {
+
         }
     }
 }
