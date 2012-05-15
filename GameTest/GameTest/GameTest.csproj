@@ -113,13 +113,13 @@
     <Compile Include="InputHandler.cs" />
     <Compile Include="ObjectBase.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Rock.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bullet.png" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>

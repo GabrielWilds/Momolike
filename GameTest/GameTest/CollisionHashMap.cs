@@ -117,63 +117,59 @@ namespace GameTest
 
                 int collisionWidth = 0;
                 int collisionHeight = 0;
-                int collisionLeft = 0;
-                int collisionTop = 0;
+                int collisionX = 0;
+                int collisionY = 0;
 
-
-                // Determine Left / Top most object
                 if (a.Left < b.Left)
                 {
                     collisionWidth = GetCollisionWidth(a, b);
-                    collisionLeft = b.Left;
+                    collisionX = a.Left;
                 }
                 else
                 {
                     collisionWidth = GetCollisionWidth(b, a);
-                    collisionLeft = a.Left;
+                    collisionX = b.Left;
                 }
 
                 if (a.Top < b.Top)
                 {
                     collisionHeight = GetCollisionHeight(a, b);
-                    collisionTop = b.Top;
+                    collisionY = a.Top;
                 }
                 else
                 {
                     collisionHeight = GetCollisionHeight(b, a);
-                    collisionTop = a.Top;
+                    collisionY = b.Top;
                 }
 
-                if (collisionHeight < 0 || collisionWidth < 0)
+                if (collisionWidth < 0 || collisionHeight < 0)
                     return;
 
-                Rectangle collision = new Rectangle(collisionHeight, collisionWidth, collisionLeft, collisionTop);
-                // do crap with it
+                Rectangle collision = new Rectangle(collisionX, collisionY, collisionWidth, collisionHeight);
+                objectA.Collide(objectB, collision);
+            }
 
+            private int GetCollisionHeight(Rectangle top, Rectangle bottom)
+            {
+                int value = top.Width + (top.Top - bottom.Top);
+                int bottomTrim = top.Bottom - bottom.Bottom;
+
+                if (bottomTrim < 0)
+                    value += bottomTrim;
+
+                return value;
             }
 
             private int GetCollisionWidth(Rectangle left, Rectangle right)
             {
                 int value = left.Width + (left.Left - right.Left);
-                int rightTrim = (left.Right - right.Right);
+                int rightTrim = left.Right - right.Right;
 
-                if (rightTrim > 0)
-                    value -= rightTrim;
-
-                return value;
-            }
-
-            private int GetCollisionHeight(Rectangle top, Rectangle bottom)
-            {
-                int value = top.Height + (top.Top - bottom.Top);
-                int bottomTrim = (top.Bottom - bottom.Bottom);
-
-                if (bottomTrim > 0)
-                    value -= bottomTrim;
+                if (rightTrim < 0)
+                    value += rightTrim;
 
                 return value;
             }
-
         }
     }
 

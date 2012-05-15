@@ -63,12 +63,26 @@ namespace GameTest
             spriteBatch.Draw(this.Sprite, this.Position, color);
         }
 
-        public override void Collide(ObjectBase obj)
+        public override void Collide(ObjectBase obj, Rectangle collision)
         {
             color = Color.Red;
-            Vector2 distance = obj.Center - this.Center;
-            this.Position -= distance;
 
+            bool ejectHorizontal = collision.Width < collision.Height;
+
+            if (ejectHorizontal)
+            {
+                if (this.Position.X <= collision.Left)
+                    this.Position.X -= collision.Width - 1;
+                else
+                    this.Position.X += collision.Width + 1;
+            }
+            else
+            {
+                if (this.Position.Y <= collision.Top)
+                    this.Position.Y -= collision.Height - 1;
+                else
+                    this.Position.Y += collision.Height + 1;
+            }
         }
     }
 }

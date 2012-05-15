@@ -11,23 +11,7 @@ namespace GameTest
     {
         public Vector2 Position;
         public Vector2 Motion = Vector2.Zero;
-        private Texture2D _sprite;
-        private Vector2 objectCenter;
-
-        public Texture2D Sprite
-        {
-            get { return _sprite; }
-            set
-            {
-                _sprite = value;
-                objectCenter = new Vector2(_sprite.Width / 2, _sprite.Height / 2);
-            }
-        }
-
-        public Vector2 Center
-        {
-            get { return Position + objectCenter; }
-        }
+        public Texture2D Sprite;
 
         protected ObjectBase()
         {
@@ -72,8 +56,9 @@ namespace GameTest
                 this.Position.X = MomolikeGame.SCREEN_BOUNDS.Width - this.Sprite.Width;
         }
 
-        public virtual void Collide(ObjectBase obj)
+        public virtual void Collide(ObjectBase obj, Rectangle collision)
         {
+
         }
     }
 }
