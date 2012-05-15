@@ -63,26 +63,70 @@ namespace GameTest
             spriteBatch.Draw(this.Sprite, this.Position, color);
         }
 
-        public override void Collide(ObjectBase obj, Rectangle collision)
+        //public override void Collide(ObjectBase obj, Rectangle collision)
+        //{
+        //    color = Color.Red;
+
+        //    bool ejectHorizontal = collision.Width < collision.Height;
+
+        //    if (ejectHorizontal)
+        //    {
+        //        if (this.Position.X <= collision.Left)
+        //            this.Position.X -= collision.Width - 1;
+        //        else
+        //            this.Position.X += collision.Width + 1;
+        //    }
+        //    else
+        //    {
+        //        if (this.Position.Y <= collision.Top)
+        //            this.Position.Y -= collision.Height - 1;
+        //        else
+        //            this.Position.Y += collision.Height + 1;
+        //    }
+        //}
+
+        public override void Collide(ObjectBase obj)
         {
             color = Color.Red;
 
-            bool ejectHorizontal = collision.Width < collision.Height;
+            Vector2 direction = obj.Center - this.Center;
 
-            if (ejectHorizontal)
+            float Y = direction.Y;
+            if (Y < 0)
+                Y *= -1;
+
+            float X = direction.X;
+            if (X < 0)
+                X *= -1;
+
+            if (X > Y)
             {
-                if (this.Position.X <= collision.Left)
-                    this.Position.X -= collision.Width - 1;
+                if (direction.X < 0)
+                    this.Position.X = obj.Rectangle.Right;
                 else
-                    this.Position.X += collision.Width + 1;
+                    this.Position.X = obj.Rectangle.Left - this.Sprite.Width;
+            }
+            else if (Y > X)
+            {
+                if (direction.Y < 0)
+                    this.Position.Y = obj.Rectangle.Bottom;
+                else
+                    this.Position.Y = obj.Rectangle.Top - this.Sprite.Height;
             }
             else
             {
-                if (this.Position.Y <= collision.Top)
-                    this.Position.Y -= collision.Height - 1;
+                if (direction.X < 0)
+                {
+                    this.Position.X = obj.Rectangle.Right;
+                    this.Position.Y = obj.Rectangle.Bottom;
+                }
                 else
-                    this.Position.Y += collision.Height + 1;
+                {
+                    this.Position.X = obj.Rectangle.Left - this.Sprite.Width;
+                    this.Position.Y = obj.Rectangle.Top - this.Sprite.Height;
+                }
             }
+
         }
     }
 }

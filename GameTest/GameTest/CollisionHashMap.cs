@@ -110,43 +110,49 @@ namespace GameTest
                 }
             }
 
+            //public void CheckForCollision(ObjectBase objectA, ObjectBase objectB)
+            //{
+            //    Rectangle a = new Rectangle((int)objectA.Position.X, (int)objectA.Position.Y, objectA.Sprite.Width, objectA.Sprite.Height);
+            //    Rectangle b = new Rectangle((int)objectB.Position.X, (int)objectB.Position.Y, objectB.Sprite.Width, objectB.Sprite.Height);
+
+            //    int collisionWidth = 0;
+            //    int collisionHeight = 0;
+            //    int collisionX = 0;
+            //    int collisionY = 0;
+
+            //    if (a.Left < b.Left)
+            //    {
+            //        collisionWidth = GetCollisionWidth(a, b);
+            //        collisionX = a.Left;
+            //    }
+            //    else
+            //    {
+            //        collisionWidth = GetCollisionWidth(b, a);
+            //        collisionX = b.Left;
+            //    }
+
+            //    if (a.Top < b.Top)
+            //    {
+            //        collisionHeight = GetCollisionHeight(a, b);
+            //        collisionY = a.Top;
+            //    }
+            //    else
+            //    {
+            //        collisionHeight = GetCollisionHeight(b, a);
+            //        collisionY = b.Top;
+            //    }
+
+            //    if (collisionWidth < 0 || collisionHeight < 0)
+            //        return;
+
+            //    Rectangle collision = new Rectangle(collisionX, collisionY, collisionWidth, collisionHeight);
+            //    objectA.Collide(objectB, collision);
+            //}
+
             public void CheckForCollision(ObjectBase objectA, ObjectBase objectB)
             {
-                Rectangle a = new Rectangle((int)objectA.Position.X, (int)objectA.Position.Y, objectA.Sprite.Width, objectA.Sprite.Height);
-                Rectangle b = new Rectangle((int)objectB.Position.X, (int)objectB.Position.Y, objectB.Sprite.Width, objectB.Sprite.Height);
-
-                int collisionWidth = 0;
-                int collisionHeight = 0;
-                int collisionX = 0;
-                int collisionY = 0;
-
-                if (a.Left < b.Left)
-                {
-                    collisionWidth = GetCollisionWidth(a, b);
-                    collisionX = a.Left;
-                }
-                else
-                {
-                    collisionWidth = GetCollisionWidth(b, a);
-                    collisionX = b.Left;
-                }
-
-                if (a.Top < b.Top)
-                {
-                    collisionHeight = GetCollisionHeight(a, b);
-                    collisionY = a.Top;
-                }
-                else
-                {
-                    collisionHeight = GetCollisionHeight(b, a);
-                    collisionY = b.Top;
-                }
-
-                if (collisionWidth < 0 || collisionHeight < 0)
-                    return;
-
-                Rectangle collision = new Rectangle(collisionX, collisionY, collisionWidth, collisionHeight);
-                objectA.Collide(objectB, collision);
+                if (objectA.Rectangle.Intersects(objectB.Rectangle))
+                    objectA.Collide(objectB);
             }
 
             private int GetCollisionHeight(Rectangle top, Rectangle bottom)
