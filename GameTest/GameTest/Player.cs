@@ -38,20 +38,24 @@ namespace GameTest
         {
             color = Color.White;
 
-            this.Motion = Vector2.Zero;
+            float inputWeightX = 0;
+            float inputWeightY = 0;
+
             if (InputHandler.KeyDown(Keys.A))
-                this.Motion.X = -1;
+                inputWeightX = -1;
             else if (InputHandler.KeyDown(Keys.D))
-                this.Motion.X = 1;
+                inputWeightX = 1;
 
             if (InputHandler.KeyDown(Keys.S))
-                this.Motion.Y = 1;
+                inputWeightY = 1;
             else if (InputHandler.KeyDown(Keys.W))
-                this.Motion.Y = -1;
+                inputWeightY = -1;
 
 
-
-            if (this.Motion != Vector2.Zero)
+            float totalWeight = Math.Abs(inputWeightX) + Math.Abs(inputWeightY);
+            if (totalWeight == 0)
+                _acceleration = 0;
+            else
             {
                 _acceleration += 0.05f;
 
@@ -59,10 +63,25 @@ namespace GameTest
                     _acceleration = _maxAcceleration;
             }
 
+            double currentAcceleration = _baseSpeed + _acceleration;
+            double horizontalSpeed = currentAcceleration * inputWeightX;
+            double verticalSpeed = currentAcceleration * inputWeightY;
+            double excessSpeed = Math.Abs(Math.Pow(horizontalSpeed, 2)) + Math.Abs(Math.Pow(verticalSpeed, 2)) - Math.Pow(_maxTotalSpeed, 2);
 
+            if (excessSpeed > 0)
+            {
+                horizontalSpeed = Math.Sqrt(Math.Pow(horizontalSpeed, 2) - (Math.Abs(inputWeightX) / totalWeight) * excessSpeed);
+                verticalSpeed = Math.Sqrt(Math.Pow(verticalSpeed, 2) - (Math.Abs(inputWeightY) / totalWeight) * excessSpeed);
 
-            this.Motion.X *= _baseSpeed + _acceleration;
-            this.Motion.Y *= _baseSpeed + _acceleration;
+                if (inputWeightX < 0)
+                    horizontalSpeed *= -1;
+                if (inputWeightY < 0)
+                    verticalSpeed *= -1;
+            }
+
+            this.Motion = Vector2.Zero;
+            this.Motion.X = (float)horizontalSpeed;
+            this.Motion.Y = (float)verticalSpeed;
             this.Position += this.Motion;
 
             EnforceBounds();

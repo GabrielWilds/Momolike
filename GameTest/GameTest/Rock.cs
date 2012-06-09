@@ -8,7 +8,7 @@ namespace GameTest
 {
     public class Rock : ObjectBase
     {
-        public Rock(Vector2 position) : base(Program.Game.LoadSprite("rock"), position, 300, 300)
+        public Rock(Vector2 position) : base(Program.Game.LoadSprite("rock"), position, 40, 40)
         {
             Animation a = new Animation();
             a.Frames = new Animation.AnimationFrame[1];

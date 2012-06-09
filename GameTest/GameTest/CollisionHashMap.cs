@@ -13,7 +13,7 @@ namespace GameTest
     {
         private const int BUCKETS_PER_ROW = 3;
         private const int BUCKETS_PER_COLUMN = 3;
-        private static readonly Bucket[,] buckets = new Bucket[BUCKETS_PER_ROW, BUCKETS_PER_COLUMN];
+        private static readonly Bucket[,] BUCKETS = new Bucket[BUCKETS_PER_ROW, BUCKETS_PER_COLUMN];
 
         static CollisionHashMap()
         {
@@ -24,8 +24,8 @@ namespace GameTest
             for (int x = 0; x < BUCKETS_PER_ROW; x++)
                 for (int y = 0; y < BUCKETS_PER_COLUMN; y++)
                 {
-                    buckets[x, y] = new Bucket();
-                    buckets[x, y].BucketArea = new Rectangle(x * divisionSizeX, y * divisionSizeY, divisionSizeX, divisionSizeY);
+                    BUCKETS[x, y] = new Bucket();
+                    BUCKETS[x, y].BucketArea = new Rectangle(x * divisionSizeX, y * divisionSizeY, divisionSizeX, divisionSizeY);
                 }
 
         }
@@ -37,11 +37,11 @@ namespace GameTest
 
         private static void FillBuckets(IEnumerable<ObjectBase> objs)
         {
-            foreach (Bucket bucket in buckets)
+            foreach (Bucket bucket in BUCKETS)
                 bucket.Clear();
 
             foreach (ObjectBase obj in objs)
-                foreach (Bucket b in buckets)
+                foreach (Bucket b in BUCKETS)
                     if (b.BucketArea.Intersects(obj.CollisionRectangle))
                         b.Add(obj);
         }
@@ -49,10 +49,8 @@ namespace GameTest
         public static void CheckCollisions(IEnumerable<ObjectBase> objs)
         {
             FillBuckets(objs);
-            foreach (Bucket bucket in buckets)
-            {
+            foreach (Bucket bucket in BUCKETS)
                 bucket.CheckCollisions();
-            }
         }
 
         private class Bucket
@@ -103,12 +101,6 @@ namespace GameTest
 
             public void CheckForCollision(ObjectBase objectA, ObjectBase objectB)
             {
-                //if (objectA.CollisionRectangle.Intersects(objectB.CollisionRectangle))
-                //    objectA.Collide(objectB);
-
-                if (!objectA.CollisionRectangle.Intersects(objectB.CollisionRectangle))
-                    return;
-
                 Rectangle a = objectA.CollisionRectangle;
                 Rectangle b = objectB.CollisionRectangle;
 

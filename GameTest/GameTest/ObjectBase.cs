@@ -9,8 +9,6 @@ namespace GameTest
 {
     public abstract class ObjectBase
     {
-        
-
         // Private Fields
         private Rectangle _rectangle;
         private int _currentAnimationFrame;
@@ -75,7 +73,7 @@ namespace GameTest
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             BlitAnimationFromSheet(spriteBatch, _currentAnimation);
-            spriteBatch.Draw(MomolikeGame.RED, this.CollisionRectangle, Color.White);
+            //spriteBatch.Draw(MomolikeGame.RED, this.CollisionRectangle, Color.White);
         }
 
         public void EnforceBounds()
