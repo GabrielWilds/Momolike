@@ -17,6 +17,9 @@ namespace GameTest
     /// </summary>
     public class MomolikeGame : Microsoft.Xna.Framework.Game
     {
+        public static Texture2D RED { get; private set; }
+
+
         public static readonly Rectangle SCREEN_BOUNDS = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         public const int SCREEN_WIDTH = 1280;
         public const int SCREEN_HEIGHT = 720;
@@ -29,9 +32,9 @@ namespace GameTest
         private int frameSkip = 0;
 
         private List<ObjectBase> _activeObjects = new List<ObjectBase>();
-
+        
         public MomolikeGame()
-        {
+        {            
             _graphics = new GraphicsDeviceManager(this);
             _graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             _graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
@@ -92,6 +95,9 @@ namespace GameTest
         {
             // Load content into pipeline.  Shouldn't be doing this in the middle of gameplay.
             Content.Load<Texture2D>("bunnySprite");
+
+            MomolikeGame.RED = new Texture2D(_graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            RED.SetData(new Color[] { new Color(255, 0, 0) });
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }

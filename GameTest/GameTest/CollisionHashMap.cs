@@ -11,50 +11,39 @@ namespace GameTest
 {
     public static class CollisionHashMap
     {
-        private static Bucket[,] buckets = new Bucket[3, 3];
-        private static int firstX;
-        private static int secondX;
-        private static int firstY;
-        private static int secondY;
+        private const int BUCKETS_PER_ROW = 3;
+        private const int BUCKETS_PER_COLUMN = 3;
+        private static readonly Bucket[,] buckets = new Bucket[BUCKETS_PER_ROW, BUCKETS_PER_COLUMN];
+
+        static CollisionHashMap()
+        {
+            int divisionSizeX = MomolikeGame.SCREEN_WIDTH / BUCKETS_PER_ROW;
+            int divisionSizeY = MomolikeGame.SCREEN_HEIGHT / BUCKETS_PER_COLUMN;
+
+            // Initialize partition coordinates
+            for (int x = 0; x < BUCKETS_PER_ROW; x++)
+                for (int y = 0; y < BUCKETS_PER_COLUMN; y++)
+                {
+                    buckets[x, y] = new Bucket();
+                    buckets[x, y].BucketArea = new Rectangle(x * divisionSizeX, y * divisionSizeY, divisionSizeX, divisionSizeY);
+                }
+
+        }
 
         public static void Initialize()
         {
-            for (int x = 0; x < buckets.GetLength(0); x++)
-                for (int y = 0; y < buckets.GetLength(1); y++)
-                    buckets[x, y] = new Bucket();
+            // do absolutely nothing - calling this function forces the static constructor to fire
         }
 
         private static void FillBuckets(IEnumerable<ObjectBase> objs)
         {
             foreach (Bucket bucket in buckets)
-            {
                 bucket.Clear();
-            }
-
-            firstX = MomolikeGame.SCREEN_WIDTH / 3;
-            secondX = firstX * 2;
-            firstY = MomolikeGame.SCREEN_HEIGHT / 3;
-            secondY = firstY * 2;
 
             foreach (ObjectBase obj in objs)
-            {
-                float objX = obj.Position.X;
-                float objY = obj.Position.Y;
-                int hashX = 0;
-                int hashY = 0;
-
-                if (objX < secondX && objX > firstX)
-                    hashX = 1;
-                else if (objX > secondX)
-                    hashX = 2;
-
-                if (objY < secondY && objY > firstY)
-                    hashX = 1;
-                else if (objY > secondY)
-                    hashX = 2;
-
-                buckets[hashX, hashY].Add(obj);
-            }
+                foreach (Bucket b in buckets)
+                    if (b.BucketArea.Intersects(obj.CollisionRectangle))
+                        b.Add(obj);
         }
 
         public static void CheckCollisions(IEnumerable<ObjectBase> objs)
@@ -68,8 +57,10 @@ namespace GameTest
 
         private class Bucket
         {
-            List<ObjectBase> moving = new List<ObjectBase>(8);
-            List<ObjectBase> still = new List<ObjectBase>(16);
+            private List<ObjectBase> moving = new List<ObjectBase>(8);
+            private List<ObjectBase> still = new List<ObjectBase>(16);
+
+            public Rectangle BucketArea;
 
             public void Add(ObjectBase obj)
             {
@@ -110,49 +101,49 @@ namespace GameTest
                 }
             }
 
-            //public void CheckForCollision(ObjectBase objectA, ObjectBase objectB)
-            //{
-            //    Rectangle a = new Rectangle((int)objectA.Position.X, (int)objectA.Position.Y, objectA.Sprite.Width, objectA.Sprite.Height);
-            //    Rectangle b = new Rectangle((int)objectB.Position.X, (int)objectB.Position.Y, objectB.Sprite.Width, objectB.Sprite.Height);
-
-            //    int collisionWidth = 0;
-            //    int collisionHeight = 0;
-            //    int collisionX = 0;
-            //    int collisionY = 0;
-
-            //    if (a.Left < b.Left)
-            //    {
-            //        collisionWidth = GetCollisionWidth(a, b);
-            //        collisionX = a.Left;
-            //    }
-            //    else
-            //    {
-            //        collisionWidth = GetCollisionWidth(b, a);
-            //        collisionX = b.Left;
-            //    }
-
-            //    if (a.Top < b.Top)
-            //    {
-            //        collisionHeight = GetCollisionHeight(a, b);
-            //        collisionY = a.Top;
-            //    }
-            //    else
-            //    {
-            //        collisionHeight = GetCollisionHeight(b, a);
-            //        collisionY = b.Top;
-            //    }
-
-            //    if (collisionWidth < 0 || collisionHeight < 0)
-            //        return;
-
-            //    Rectangle collision = new Rectangle(collisionX, collisionY, collisionWidth, collisionHeight);
-            //    objectA.Collide(objectB, collision);
-            //}
-
             public void CheckForCollision(ObjectBase objectA, ObjectBase objectB)
             {
-                if (objectA.Rectangle.Intersects(objectB.Rectangle))
-                    objectA.Collide(objectB);
+                //if (objectA.CollisionRectangle.Intersects(objectB.CollisionRectangle))
+                //    objectA.Collide(objectB);
+
+                if (!objectA.CollisionRectangle.Intersects(objectB.CollisionRectangle))
+                    return;
+
+                Rectangle a = objectA.CollisionRectangle;
+                Rectangle b = objectB.CollisionRectangle;
+
+                int collisionWidth = 0;
+                int collisionHeight = 0;
+                int collisionX = 0;
+                int collisionY = 0;
+
+                if (a.Left < b.Left)
+                {
+                    collisionWidth = GetCollisionWidth(a, b);
+                    collisionX = b.Left;
+                }
+                else
+                {
+                    collisionWidth = GetCollisionWidth(b, a);
+                    collisionX = a.Left;
+                }
+
+                if (a.Top < b.Top)
+                {
+                    collisionHeight = GetCollisionHeight(a, b);
+                    collisionY = b.Top;
+                }
+                else
+                {
+                    collisionHeight = GetCollisionHeight(b, a);
+                    collisionY = a.Top;
+                }
+
+                if (collisionWidth < 0 || collisionHeight < 0)
+                    return;
+
+                Rectangle collision = new Rectangle(collisionX, collisionY, collisionWidth, collisionHeight);
+                objectA.Collide(objectB, collision);
             }
 
             private int GetCollisionHeight(Rectangle top, Rectangle bottom)
@@ -160,7 +151,7 @@ namespace GameTest
                 int value = top.Width + (top.Top - bottom.Top);
                 int bottomTrim = top.Bottom - bottom.Bottom;
 
-                if (bottomTrim < 0)
+                if (bottomTrim > 0)
                     value += bottomTrim;
 
                 return value;
@@ -171,7 +162,7 @@ namespace GameTest
                 int value = left.Width + (left.Left - right.Left);
                 int rightTrim = left.Right - right.Right;
 
-                if (rightTrim < 0)
+                if (rightTrim > 0)
                     value += rightTrim;
 
                 return value;

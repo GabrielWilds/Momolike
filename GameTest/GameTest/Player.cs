@@ -12,6 +12,8 @@ namespace GameTest
 {
     public class Player : ObjectBase
     {
+        private Animation _testAnimation;
+
         private float _acceleration = 0f;
         private float _maxAcceleration = 3.0f;
         private float _baseSpeed = 3.0f;
@@ -19,9 +21,17 @@ namespace GameTest
         private float _maxTotalSpeed = 6.0f;
         private Color color = Color.White;
 
-        public Player() : base(Program.Game.LoadSprite("bunnySprite"))
+        public Player()
+            : base(Program.Game.LoadSprite("boxsprite"), new Vector2(), 32, 32)
         {
+            _testAnimation = new Animation();
+            _testAnimation.Frames = new Animation.AnimationFrame[4];
+            _testAnimation.LoopStartFrame = 1;
 
+            for (int i = 0; i < 4; i++)
+                _testAnimation.Frames[i] = new Animation.AnimationFrame(i * 32, i * 32, 32, 32, 333);
+
+            SetCurrentAnimation(_testAnimation, 0);
         }
 
         public override void Update()
@@ -60,73 +70,29 @@ namespace GameTest
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.Sprite, this.Position, color);
+            base.Draw(spriteBatch);
         }
 
-        //public override void Collide(ObjectBase obj, Rectangle collision)
-        //{
-        //    color = Color.Red;
-
-        //    bool ejectHorizontal = collision.Width < collision.Height;
-
-        //    if (ejectHorizontal)
-        //    {
-        //        if (this.Position.X <= collision.Left)
-        //            this.Position.X -= collision.Width - 1;
-        //        else
-        //            this.Position.X += collision.Width + 1;
-        //    }
-        //    else
-        //    {
-        //        if (this.Position.Y <= collision.Top)
-        //            this.Position.Y -= collision.Height - 1;
-        //        else
-        //            this.Position.Y += collision.Height + 1;
-        //    }
-        //}
-
-        public override void Collide(ObjectBase obj)
+        public override void Collide(ObjectBase obj, Rectangle collision)
         {
             color = Color.Red;
 
-            Vector2 direction = obj.Center - this.Center;
+            bool ejectHorizontal = collision.Width < collision.Height;
 
-            float Y = direction.Y;
-            if (Y < 0)
-                Y *= -1;
-
-            float X = direction.X;
-            if (X < 0)
-                X *= -1;
-
-            if (X > Y)
+            if (ejectHorizontal)
             {
-                if (direction.X < 0)
-                    this.Position.X = obj.Rectangle.Right;
+                if (this.Position.X <= collision.Left)
+                    this.Position.X -= collision.Width - 1;
                 else
-                    this.Position.X = obj.Rectangle.Left - this.Sprite.Width;
-            }
-            else if (Y > X)
-            {
-                if (direction.Y < 0)
-                    this.Position.Y = obj.Rectangle.Bottom;
-                else
-                    this.Position.Y = obj.Rectangle.Top - this.Sprite.Height;
+                    this.Position.X += collision.Width + 1;
             }
             else
             {
-                if (direction.X < 0)
-                {
-                    this.Position.X = obj.Rectangle.Right;
-                    this.Position.Y = obj.Rectangle.Bottom;
-                }
+                if (this.Position.Y <= collision.Top)
+                    this.Position.Y -= collision.Height - 1;
                 else
-                {
-                    this.Position.X = obj.Rectangle.Left - this.Sprite.Width;
-                    this.Position.Y = obj.Rectangle.Top - this.Sprite.Height;
-                }
+                    this.Position.Y += collision.Height + 1;
             }
-
         }
     }
 }
