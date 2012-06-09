@@ -19,7 +19,7 @@ namespace GameTest
         private float _baseSpeed = 3.0f;
         private float _currentSpeed = 0.0f;
         private float _maxTotalSpeed = 6.0f;
-        private Color color = Color.White;
+        private Color _tint = Color.White; // White is "none" (XNA spec)
 
         public Player()
             : base(Program.Game.LoadSprite("boxsprite"), new Vector2(), 32, 32)
@@ -36,8 +36,6 @@ namespace GameTest
 
         public override void Update()
         {
-            color = Color.White;
-
             float inputWeightX = 0;
             float inputWeightY = 0;
 
@@ -51,8 +49,8 @@ namespace GameTest
             else if (InputHandler.KeyDown(Keys.W))
                 inputWeightY = -1;
 
-
             float totalWeight = Math.Abs(inputWeightX) + Math.Abs(inputWeightY);
+            
             if (totalWeight == 0)
                 _acceleration = 0;
             else
@@ -63,10 +61,14 @@ namespace GameTest
                     _acceleration = _maxAcceleration;
             }
 
-            double currentAcceleration = _baseSpeed + _acceleration;
-            double horizontalSpeed = currentAcceleration * inputWeightX;
-            double verticalSpeed = currentAcceleration * inputWeightY;
-            double excessSpeed = Math.Abs(Math.Pow(horizontalSpeed, 2)) + Math.Abs(Math.Pow(verticalSpeed, 2)) - Math.Pow(_maxTotalSpeed, 2);
+            double currentSpeed = _baseSpeed + _acceleration;
+
+            if (currentSpeed > _maxTotalSpeed)
+                currentSpeed = _maxTotalSpeed;
+
+            double horizontalSpeed = currentSpeed * inputWeightX;
+            double verticalSpeed = currentSpeed * inputWeightY;
+            double excessSpeed = Math.Abs(Math.Pow(horizontalSpeed, 2)) + Math.Abs(Math.Pow(verticalSpeed, 2)) - Math.Pow(currentSpeed, 2);
 
             if (excessSpeed > 0)
             {
@@ -79,7 +81,6 @@ namespace GameTest
                     verticalSpeed *= -1;
             }
 
-            this.Motion = Vector2.Zero;
             this.Motion.X = (float)horizontalSpeed;
             this.Motion.Y = (float)verticalSpeed;
             this.Position += this.Motion;
@@ -94,7 +95,7 @@ namespace GameTest
 
         public override void Collide(ObjectBase obj, Rectangle collision)
         {
-            color = Color.Red;
+            _tint = Color.Red;
 
             bool ejectHorizontal = collision.Width < collision.Height;
 
