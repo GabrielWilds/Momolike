@@ -18,7 +18,7 @@ namespace GameTest
     public class MomolikeGame : Microsoft.Xna.Framework.Game
     {
         public static Texture2D RED { get; private set; }
-
+        public static GameTime GameTime { get; private set; }
 
         public static readonly Rectangle SCREEN_BOUNDS = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         public const int SCREEN_WIDTH = 1280;
@@ -120,6 +120,8 @@ namespace GameTest
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
+
+            GameTime = gameTime;
 
             foreach (var item in _activeObjects)
                 item.Update();

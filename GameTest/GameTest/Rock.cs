@@ -14,8 +14,8 @@ namespace GameTest
             a.Frames = new Animation.AnimationFrame[1];
             a.Frames[0] = new Animation.AnimationFrame(0, 0, 40, 40, 0);
             a.LoopStartFrame = 0;
-
-            SetCurrentAnimation(a, 0);
+            AnimationManager.AddAnimation("idle", a);
+            AnimationManager.SetCurrentAnimation("idle", 0);
         }
 
         public override void Update()

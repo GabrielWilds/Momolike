@@ -11,9 +11,7 @@ namespace GameTest
     {
         // Private Fields
         private Rectangle _rectangle;
-        private int _currentAnimationFrame;
-        private Animation _currentAnimation;
-
+        
 
         // Public Fields & Properties
         public Vector2 Position;
@@ -30,25 +28,25 @@ namespace GameTest
 
         public Vector2 Center
         {
-            get { return new Vector2(Position.X + (_currentAnimation.Frames[_currentAnimationFrame].ClippingRectangle.Width / 2), Position.Y + (_currentAnimation.Frames[_currentAnimationFrame].ClippingRectangle.Height / 2)); }
+            get { return new Vector2(Position.X + (Width / 2), Position.Y + (Height / 2)); }
         }
-
-        public Texture2D SpriteSheet { get; set; }
 
         public int Height { get; set; }
 
         public int Width { get; set; }
 
+        protected AnimationManager AnimationManager { get; private set; }
+
 
         // Constructors
         protected ObjectBase()
         {
-
+            this.AnimationManager = new AnimationManager();
         }
 
-        protected ObjectBase(Texture2D spriteSheet)
+        protected ObjectBase(Texture2D spriteSheet) : this()
         {
-            this.SpriteSheet = spriteSheet;
+            AnimationManager.SpriteSheet = spriteSheet;
         }
 
         protected ObjectBase(Texture2D sprite, Vector2 position, int height, int width)
@@ -72,7 +70,7 @@ namespace GameTest
         /// </summary>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            BlitAnimationFromSheet(spriteBatch, _currentAnimation);
+            AnimationManager.BlitCurrentAnimationFromSheet(spriteBatch, Position);
             //spriteBatch.Draw(MomolikeGame.RED, this.CollisionRectangle, Color.White);
         }
 
@@ -94,15 +92,8 @@ namespace GameTest
 
         }
 
-        protected void SetCurrentAnimation(Animation animation, int frameNumber)
-        {
-            _currentAnimation = animation;
-            _currentAnimationFrame = frameNumber;
-        }
 
-        protected virtual void BlitAnimationFromSheet(SpriteBatch spriteBatch, Animation animation)
-        {
-            spriteBatch.Draw(this.SpriteSheet, this.Position, animation.Frames[this._currentAnimationFrame].ClippingRectangle, Color.White);
-        }
+
+        
     }
 }

@@ -108,8 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="AnimationManager.cs" />
     <Compile Include="Bucket.cs" />
     <Compile Include="CollisionHashMap.cs" />
+    <Compile Include="Direction.cs" />
     <Compile Include="InputHandler.cs" />
     <Compile Include="ObjectBase.cs" />
     <Compile Include="Player.cs" />
